@@ -1,7 +1,7 @@
 TEMPLATE = app
 
 QT += qml quick widgets
-CONFIG += c++11
+CONFIG += c++11 qwt
 
 SOURCES += main.cpp \
     QuickQwtPlot.cpp \
@@ -23,4 +23,4 @@ HEADERS += \
 
 INCLUDEPATH += $$PWD/Libs/qwt/include
 
-LIBS += -L$$PWD/Libs/qwt/lib/ -lqwtd
+LIBS += -L$$PWD/Libs/qwt/lib/ -lqwt

@@ -1,27 +1,32 @@
 import QtQuick 2.3
 import QtQuick.Controls 1.2
+import QtQuick.Layouts 1.1
 import QtQuick.Window 2.2
 
 Rectangle {
-    id: main_window
+    id: root
+    anchors.fill: parent
     visible: true
 
-    Row {
+    RowLayout {
+        id: main_layout
+        anchors.fill: parent
 
-        CurveGraph {
-
+        GroupBox {
+            title: "Rect layout"
+            Layout.fillWidth: true
+            CurveGraph {
+                anchors.centerIn: parent
+            }
         }
 
-        Column {
-
-            Text {
-                text: qsTr("Hello World")
-                //anchors.centerIn: parent
-            }
-
-            Row {
-                //anchors.centerIn: parent
-                spacing: parent.width / 10
+        GroupBox {
+            title: "Row layout"
+            Layout.fillWidth: true
+            RowLayout {
+                id: button_layout
+                anchors.centerIn: parent
+                spacing: main_layout.width / 10
                 SimpleButton {
                     button_text: qsTr("Start")
                     buttonColor: "green"
@@ -39,7 +44,6 @@ Rectangle {
                 }
 
             }
-
         }
 
     }
