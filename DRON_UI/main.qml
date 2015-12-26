@@ -1,9 +1,8 @@
 import QtQuick 2.3
 import QtQuick.Controls 1.2
 import QtQuick.Window 2.2
-//import "SimpleButton.qml"
 
-ApplicationWindow {
+Rectangle {
     id: main_window
     visible: true
 

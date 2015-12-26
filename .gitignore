@@ -28,5 +28,4 @@
 *.app
 
 # Build folders
-build_UI_Release
-build_UI_Debug
+build*

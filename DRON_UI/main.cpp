@@ -1,15 +1,13 @@
-#include <QGuiApplication>
-#include <QQmlApplicationEngine>
-#include <QQmlEngine>
-
+#include <QApplication>
+#include "MainWindow.h"
 #include "QuickQwtPlot.h"
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication app(argc, argv);
-    QQmlApplicationEngine engine;
+    QApplication app(argc, argv);
     qmlRegisterType<QuickQwtPlot>("QuickQwt", 1, 0, "QuickQwtPlot");
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    MainWindow w;
+    w.show();
 
     return app.exec();
 }

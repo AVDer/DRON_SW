@@ -1,8 +1,5 @@
-import QtQuick 2.0
+import QtQuick 2.3
 import QuickQwt 1.0
-
-// QuickQwtPlot
-// Rectangle
 
 QuickQwtPlot {
     width: 600

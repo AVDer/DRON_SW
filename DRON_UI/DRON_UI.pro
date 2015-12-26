@@ -4,7 +4,9 @@ QT += qml quick widgets
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    QuickQwtPlot.cpp
+    QuickQwtPlot.cpp \
+    QuickCurve.cpp \
+    MainWindow.cpp
 
 RESOURCES += qml.qrc
 
@@ -15,7 +17,9 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
-    QuickQwtPlot.h
+    QuickQwtPlot.h \
+    QuickCurve.h \
+    MainWindow.h
 
 INCLUDEPATH += $$PWD/Libs/qwt/include
 
