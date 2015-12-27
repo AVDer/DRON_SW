@@ -23,4 +23,11 @@ HEADERS += \
 
 INCLUDEPATH += $$PWD/Libs/qwt/include
 
-LIBS += -L$$PWD/Libs/qwt/lib/ -lqwt
+LIBS += -L$$PWD/Libs/qwt/lib/
+
+unix {
+LIBS += -lqwt
+}
+win32 {
+LIBS += -lqwtd
+}

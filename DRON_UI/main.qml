@@ -13,6 +13,7 @@ Rectangle {
         anchors.fill: parent
 
         GroupBox {
+            id: graph_box
             title: "Rect layout"
             Layout.fillWidth: true
             CurveGraph {
@@ -21,23 +22,26 @@ Rectangle {
         }
 
         GroupBox {
+            id: button_groupbox
             title: "Row layout"
             Layout.fillWidth: true
             RowLayout {
                 id: button_layout
-                anchors.centerIn: parent
-                spacing: main_layout.width / 10
+                anchors.fill: parent
                 SimpleButton {
+                    anchors.left: parent.left
                     button_text: qsTr("Start")
                     buttonColor: "green"
                     //onClicked: Qt.quit()
                 }
                 SimpleButton {
+                    anchors.centerIn: parent
                     buttonColor: "red"
                     button_text: qsTr("Stop")
                     //onClicked: Qt.quit()
                 }
                 SimpleButton {
+                    anchors.right: parent.right
                     buttonColor: "grey"
                     button_text: qsTr("Quit")
                     //onClicked: Qt.quit()

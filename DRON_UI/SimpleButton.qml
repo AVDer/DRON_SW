@@ -39,6 +39,16 @@ Rectangle {
     }
 
     // Determines the color of the button by using the conditional operator
-    color: buttonMouseArea.pressed ? Qt.darker(buttonColor, 1.5) : buttonColor
     border.color: borderColor
+
+    property Gradient released_gradient: Gradient {
+        GradientStop { position: 0.0; color: "lightsteelblue" }
+        GradientStop { position: 1.0; color: "slategray" }
+    }
+    property Gradient pressed_gradient: Gradient {
+        GradientStop { position: 0.0; color: "slategray" }
+        GradientStop { position: 1.0; color: "lightsteelblue" }
+    }
+
+    gradient: buttonMouseArea.pressed ? pressed_gradient : released_gradient
 }
