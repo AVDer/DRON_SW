@@ -1,8 +1,8 @@
 import QtQuick 2.3
 
 Rectangle {
-    width: 120; height: 75
-    radius: 20
+    width: 120; height: 35
+    radius: 10
     smooth: true
 
     property color buttonColor: "lightblue"

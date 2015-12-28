@@ -15,11 +15,14 @@ Rectangle {
         GroupBox {
             id: graph_box
             title: "Rect layout"
-            Layout.fillWidth: true
+            width: parent.width / 2
+            height: parent.height
             CurveGraph {
                 anchors.centerIn: parent
             }
+
         }
+
 
         GroupBox {
             id: button_groupbox
@@ -49,6 +52,7 @@ Rectangle {
 
             }
         }
+
 
     }
 
