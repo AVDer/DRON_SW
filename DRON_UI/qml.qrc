@@ -6,5 +6,7 @@
         <file>LimitsInput.qml</file>
         <file>StartStopPanel.qml</file>
         <file>GraphPanel.qml</file>
+        <file>FastScanPanel.qml</file>
+        <file>DataInputTabs.qml</file>
     </qresource>
 </RCC>

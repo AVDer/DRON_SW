@@ -11,47 +11,16 @@ Rectangle {
     Row {
         id: main_layout
         anchors.fill: parent
+        spacing: 10
 
         GraphPanel {
-            width: parent.width / 2
+            id: graph_panel
+            width: parent.width * 0.75
         }
 
-
-        GroupBox {
-            id: button_groupbox
-            title: "Row layout"
-            Layout.fillWidth: true
-
-            RowLayout {
-                id: button_layout
-                anchors.fill: parent
-                SimpleButton {
-                    anchors.left: parent.left
-                    button_text: qsTr("Start")
-                    buttonColor: "green"
-                    //onClicked: Qt.quit()
-                }
-                SimpleButton {
-                    anchors.centerIn: parent
-                    buttonColor: "red"
-                    button_text: qsTr("Stop")
-                    //onClicked: Qt.quit()
-                }
-                SimpleButton {
-                    anchors.right: parent.right
-                    buttonColor: "grey"
-                    button_text: qsTr("Quit")
-                    //onClicked: Qt.quit()
-                }
-
-            }
-
-
+        DataInputTabs {
+            width: parent.width - graph_panel.width - 20
         }
-
-
     }
-
-
 }
 
