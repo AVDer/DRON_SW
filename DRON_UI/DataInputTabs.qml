@@ -9,11 +9,16 @@ TabView {
         }
     }
     Tab {
-        title: "Blue"
-        Rectangle { color: "blue" }
+        title: qsTr("Point scan")
+        FullScanPanel {
+
+        }
     }
     Tab {
         title: "Settings"
+        SettingsPanel {
+
+        }
     }
 }
 
