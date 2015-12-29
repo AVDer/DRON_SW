@@ -4,5 +4,7 @@
         <file>SimpleButton.qml</file>
         <file>CurveGraph.qml</file>
         <file>LimitsInput.qml</file>
+        <file>StartStopPanel.qml</file>
+        <file>GraphPanel.qml</file>
     </qresource>
 </RCC>

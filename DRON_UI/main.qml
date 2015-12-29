@@ -8,19 +8,12 @@ Rectangle {
     anchors.fill: parent
     visible: true
 
-    RowLayout {
+    Row {
         id: main_layout
         anchors.fill: parent
 
-        GroupBox {
-            id: graph_box
-            title: "Rect layout"
+        GraphPanel {
             width: parent.width / 2
-            height: parent.height
-            CurveGraph {
-                anchors.centerIn: parent
-            }
-
         }
 
 
@@ -28,6 +21,7 @@ Rectangle {
             id: button_groupbox
             title: "Row layout"
             Layout.fillWidth: true
+
             RowLayout {
                 id: button_layout
                 anchors.fill: parent
@@ -51,6 +45,8 @@ Rectangle {
                 }
 
             }
+
+
         }
 
 
