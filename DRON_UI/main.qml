@@ -7,6 +7,7 @@ Rectangle {
     id: root
     anchors.fill: parent
     visible: true
+    color: "slategray"
 
     Row {
         id: main_layout

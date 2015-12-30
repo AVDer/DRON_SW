@@ -16,6 +16,7 @@ Rectangle {
         id: buttonLabel
         anchors.centerIn: parent
         text: button_text
+        color: "black"
     }
 
     onButtonClick: {
@@ -39,7 +40,7 @@ Rectangle {
     }
 
     // Determines the color of the button by using the conditional operator
-    border.color: borderColor
+    border { color: borderColor; width: 2 }
 
     property Gradient released_gradient: Gradient {
         GradientStop { position: 0.0; color: "lightsteelblue" }
