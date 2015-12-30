@@ -7,10 +7,9 @@ Rectangle {
     id: root
     anchors.fill: parent
     visible: true
-    color: "slategray"
+    //color: "slategray"
 
     property int partition: width/4
-    //color:"slategray"
 
     state: "SETTINGS_OPEN"
 
@@ -62,7 +61,7 @@ Rectangle {
         DataInputTabs {
             z: -1
             id: dataTab
-            width: parent.width - graph_panel.width - 60
+            width: parent.width - graphPanel.width - 60
         }
     }
 
