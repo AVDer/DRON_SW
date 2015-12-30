@@ -7,6 +7,7 @@ Rectangle {
     id: root
     anchors.fill: parent
     visible: true
+    color: "slategray"
 
     property int partition: width/4
     //color:"slategray"
