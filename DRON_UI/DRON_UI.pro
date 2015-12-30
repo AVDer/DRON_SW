@@ -31,3 +31,5 @@ LIBS += -lqwt
 win32 {
 LIBS += -lqwtd
 }
+
+DISTFILES +=

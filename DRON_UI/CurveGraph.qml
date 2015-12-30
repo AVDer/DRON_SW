@@ -5,6 +5,7 @@ import QtQuick.Controls 1.2
 Item {
     width: parent.width
     height: parent.height
+
     QuickQwtPlot {
         id: qwt_plot
         anchors.right: parent.right

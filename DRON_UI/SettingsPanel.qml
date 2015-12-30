@@ -5,7 +5,6 @@ import QtQuick.Controls 1.2
 GridLayout {
     anchors.centerIn: parent
     columns: 3
-    //spacing: 10
 
     Text {text: " "}
     Text {text: " "}
@@ -19,10 +18,14 @@ GridLayout {
     TextField { }
     Text {text: qsTr("s")}
 
+    Text {
+        text: qsTr("text")
+        Layout.columnSpan: 3
+    }
+
     Text {text: qsTr("File")}
     TextField { }
     Button {
         text: qsTr("Browse")
     }
-
 }

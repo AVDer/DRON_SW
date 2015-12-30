@@ -4,8 +4,7 @@ import QtQuick.Layouts 1.1
 
 GroupBox {
     id: graph_box
-    title: "Intensity chart"
-    //width: parent.width / 2
+    title: qsTr("Intensity chart")
     height: parent.height
 
     ColumnLayout {
@@ -21,6 +20,7 @@ GroupBox {
             id: start_stop_panel
             anchors.bottom: parent.bottom
             anchors.right: parent.right
+            color:"slategray"
         }
     }
 
