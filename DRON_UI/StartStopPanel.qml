@@ -13,8 +13,15 @@ Rectangle {
     }
 
     SimpleButton {
-        id: stop_button
+        id: pause_button
         anchors.right: start_button.left; anchors.rightMargin: margin
+        anchors.verticalCenter: parent.verticalCenter
+        button_text: qsTr("Pause")
+    }
+
+    SimpleButton {
+        id: stop_button
+        anchors.right: pause_button.left; anchors.rightMargin: margin
         anchors.verticalCenter: parent.verticalCenter
         button_text: qsTr("Start")
     }

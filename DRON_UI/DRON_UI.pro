@@ -6,7 +6,8 @@ CONFIG += c++11 qwt
 SOURCES += main.cpp \
     QuickQwtPlot.cpp \
     QuickCurve.cpp \
-    MainWindow.cpp
+    MainWindow.cpp \
+    FileManager.cpp
 
 RESOURCES += qml.qrc
 
@@ -19,7 +20,8 @@ include(deployment.pri)
 HEADERS += \
     QuickQwtPlot.h \
     QuickCurve.h \
-    MainWindow.h
+    MainWindow.h \
+    FileManager.h
 
 INCLUDEPATH += $$PWD/Libs/qwt/include
 

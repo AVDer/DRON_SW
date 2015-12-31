@@ -20,6 +20,7 @@ Rectangle {
         GraphPanel {
             id: graphPanel
             width: partition * 3
+            //Behavior { NumberAnimation { properties: "width"; duration: 300; easing.type:Easing.OutExpo } }
         }
 
         Rectangle {
@@ -71,15 +72,26 @@ Rectangle {
             name: "SETTINGS_OPEN"
             PropertyChanges { target: dataTab; x: arrowDrawer.x + arrowDrawer.width }
             PropertyChanges { target: graphPanel; width: partition * 3}
-            PropertyChanges { target: arrowIcon; rotation: 270}
+            PropertyChanges { target: arrowIcon; rotation: 90}
         },
         State {
             name: "SETTINGS_CLOSED"
             PropertyChanges { target: dataTab; x: 0 }
             PropertyChanges { target: graphPanel; width: mainLayout.width - arrowDrawer.width}
-            PropertyChanges { target: arrowIcon; rotation: 90 }
+            PropertyChanges { target: arrowIcon; rotation: 270 }
         }
     ]
     //! [states]
+
+
+    //! [transitions]
+    transitions: [
+        Transition {
+            to: "*"
+            NumberAnimation { target: graphPanel; properties: "width"; duration: 500; easing.type:Easing.OutExpo }
+        }
+    ]
+    //! [transitions]
+
 }
 

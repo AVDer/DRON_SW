@@ -10,7 +10,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     container = QWidget::createWindowContainer(view, this);
     view->setSource(QUrl("qrc:/main.qml"));
 
-    this->setCentralWidget(container);
+    setCentralWidget(container);
+
 }
 
 MainWindow::~MainWindow()

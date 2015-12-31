@@ -1,8 +1,12 @@
-import QtQuick 2.0
+import QtQuick 2.5
+import QtQuick.Controls 1.4
+import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.1
-import QtQuick.Controls 1.2
+
+import dron.FileManager 1.0
 
 GridLayout {
+    id: settings_page
     anchors.centerIn: parent
     columns: 3
 
@@ -19,7 +23,8 @@ GridLayout {
     Text {text: qsTr("s")}
 
     Text {
-        text: qsTr("text")
+        id: file_dir_part
+        text: file_manager.filename
         Layout.columnSpan: 3
     }
 
@@ -27,5 +32,23 @@ GridLayout {
     TextField { }
     Button {
         text: qsTr("Browse")
+        onClicked: fileDialog.open()
+    }
+
+    FileManager {
+        id: file_manager
+    }
+
+    FileDialog {
+        id: fileDialog
+        title: "Please choose a file"
+        folder: shortcuts.home
+        visible: true
+
+        onAccepted: {
+            file_manager.filename = fileDialog.fileUrl
+            file_dir_part.text = fileDialog.fileUrl
+        }
+        //Component.onCompleted: visible = true
     }
 }
