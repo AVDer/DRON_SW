@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.1
 
 import dron.FileManager 1.0
 
+
 GridLayout {
     id: settings_page
     anchors.centerIn: parent
@@ -15,11 +16,25 @@ GridLayout {
     Text {text: " "}
 
     Text {text: qsTr("Braking time")}
-    TextField { }
+    TextField {
+        id: break_input
+        text: measureSettings.brakeTime
+        onAccepted: {
+            break_input.focus = false
+            measureSettings.brakeTime = break_input.text
+        }
+    }
     Text {text: qsTr("ms")}
 
     Text {text: qsTr("Delay")}
-    TextField { }
+    TextField {
+        id: delay_input
+        text: measureSettings.delay
+        onAccepted: {
+            delay_input.focus = false
+            measureSettings.delay = delay_input.text
+        }
+    }
     Text {text: qsTr("s")}
 
     Text {text: qsTr("Directory")}

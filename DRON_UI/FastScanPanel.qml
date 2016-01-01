@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.1
-import QtQuick.Controls 1.2
+import QtQuick.Controls 1.4
 
 Grid {
     anchors.centerIn: parent
@@ -12,12 +12,25 @@ Grid {
     Text {text: " "}
 
     Text {text: qsTr("Start angle")}
-    TextField { }
+    TextField {
+        id: f_start_angle
+        text: measureSettings.startAngle
+        onAccepted: {
+            f_start_angle.focus = false
+            measureSettings.startAngle = f_start_angle.text
+        }
+    }
     Text {text: qsTr("°")}
 
     Text {text: qsTr("Stop angle")}
-    TextField { }
+    TextField {
+        id: f_stop_angle
+        text: measureSettings.stopAngle
+        onAccepted: {
+            f_stop_angle.focus = false
+            measureSettings.stopAngle = f_stop_angle.text
+        }
+    }
     Text {text: qsTr("°")}
-
 }
 
