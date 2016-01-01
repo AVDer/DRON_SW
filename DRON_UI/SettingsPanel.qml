@@ -22,14 +22,18 @@ GridLayout {
     TextField { }
     Text {text: qsTr("s")}
 
+    Text {text: qsTr("Directory")}
     Text {
         id: file_dir_part
-        text: file_manager.filename
-        Layout.columnSpan: 3
+        text: file_manager.directory
+        Layout.columnSpan: 2
     }
 
     Text {text: qsTr("File")}
-    TextField { }
+    TextField {
+        id: file_file_part
+        text: file_manager.filename
+    }
     Button {
         text: qsTr("Browse")
         onClicked: fileDialog.open()
@@ -39,16 +43,17 @@ GridLayout {
         id: file_manager
     }
 
-    FileDialog {
-        id: fileDialog
-        title: "Please choose a file"
-        folder: shortcuts.home
-        visible: true
 
-        onAccepted: {
-            file_manager.filename = fileDialog.fileUrl
-            file_dir_part.text = fileDialog.fileUrl
+    Item {
+        visible: false
+        FileDialog {
+            id: fileDialog
+            title: "Please choose a file"
+            folder: shortcuts.home
+
+            onAccepted: {
+                file_manager.filename = fileDialog.fileUrl
+            }
         }
-        //Component.onCompleted: visible = true
     }
 }

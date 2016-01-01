@@ -5,9 +5,6 @@ Rectangle {
     radius: 10
     smooth: true
 
-    property color buttonColor: "lightblue"
-    property color onHoverColor: "black"
-    property color borderColor: "white"
     property string button_text: "Push me"
 
     signal buttonClick()
@@ -18,22 +15,21 @@ Rectangle {
         text: button_text
         color: "black"
     }
-
+/*
     onButtonClick: {
         //console.log(buttonLabel.text + " clicked")
-        console.log(parent.width)
     }
-
+*/
     MouseArea{
         id: buttonMouseArea
         anchors.fill: parent
         onClicked: buttonClick()
         hoverEnabled: true
-        onEntered: parent.border.color = onHoverColor
-        onExited:  parent.border.color = borderColor
+        onEntered: parent.border.color = "black"
+        onExited:  parent.border.color = "white"
     }
 
-    border { color: borderColor; width: 2 }
+    border { color: "white"; width: 2 }
 
     property Gradient released_gradient: Gradient {
         GradientStop { position: 0.0; color: "lightsteelblue" }
