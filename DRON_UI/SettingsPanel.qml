@@ -3,6 +3,8 @@ import QtQuick.Controls 1.4
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.1
 
+import Qt.labs.settings 1.0
+
 import dron.FileManager 1.0
 
 
@@ -19,8 +21,8 @@ GridLayout {
     TextField {
         id: break_input
         text: measureSettings.brakeTime
-        onAccepted: {
-            break_input.focus = false
+        onTextChanged: {
+            //break_input.focus = false
             measureSettings.brakeTime = break_input.text
         }
     }
@@ -30,8 +32,8 @@ GridLayout {
     TextField {
         id: delay_input
         text: measureSettings.delay
-        onAccepted: {
-            delay_input.focus = false
+        onTextChanged: {
+            //delay_input.focus = false
             measureSettings.delay = delay_input.text
         }
     }
@@ -70,5 +72,12 @@ GridLayout {
                 file_manager.filename = fileDialog.fileUrl
             }
         }
+    }
+
+    Settings {
+        property alias break_time: break_input.text
+        property alias delay: delay_input.text
+        property alias work_dir: file_dir_part.text
+        property alias work_file: file_file_part.text
     }
 }

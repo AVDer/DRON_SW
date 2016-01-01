@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.4
+import Qt.labs.settings 1.0
 
 Grid {
     anchors.centerIn: parent
@@ -15,8 +16,8 @@ Grid {
     TextField {
         id: n_start_angle
         text: measureSettings.startAngle
-        onAccepted: {
-            n_start_angle.focus = false
+        onTextChanged: {
+            //n_start_angle.focus = false
             measureSettings.startAngle = n_start_angle.text
         }
     }
@@ -26,8 +27,8 @@ Grid {
     TextField {
         id: n_stop_angle
         text: measureSettings.stopAngle
-        onAccepted: {
-            n_stop_angle.focus = false
+        onTextChanged: {
+            //n_stop_angle.focus = false
             measureSettings.stopAngle = n_stop_angle.text
         }
     }
@@ -37,8 +38,8 @@ Grid {
     TextField {
         id: step_input
         text: measureSettings.step
-        onAccepted: {
-            step_input.focus = false
+        onTextChanged: {
+            //step_input.focus = false
             measureSettings.step = step_input.text
         }
     }
@@ -48,11 +49,18 @@ Grid {
     TextField {
         id: exp_input
         text: measureSettings.exposition
-        onAccepted: {
-            exp_input.focus = false
+        onTextChanged: {
+            //exp_input.focus = false
             measureSettings.exposition = exp_input.text
         }
     }
     Text {text: qsTr("s")}
+
+    Settings {
+        property alias start_angle: n_start_angle.text
+        property alias stop_angle: n_stop_angle.text
+        property alias step: step_input.text
+        property alias exposition: exp_input.text
+    }
 
 }

@@ -14,11 +14,11 @@ class FileManager : public QObject
 public:
     explicit FileManager(QObject *parent = 0);
 
-    QString directory() const {
+    static QString directory() {
         return directory_;
     }
 
-    QString filename() const {
+    static QString filename() {
         return filename_;
     }
 
@@ -31,8 +31,8 @@ signals:
 public slots:
 
 private:
-    QString directory_;
-    QString filename_;
+    static QString directory_;
+    static QString filename_;
 };
 
 #endif // FILEMANAGER_H

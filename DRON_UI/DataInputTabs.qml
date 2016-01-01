@@ -5,14 +5,14 @@ import dron.MeasureSettings 1.0
 
 TabView {
     Tab {
-        title: qsTr("Fast scan")
-        FastScanPanel {
+        title: qsTr("Point scan")
+        FullScanPanel {
 
         }
     }
     Tab {
-        title: qsTr("Point scan")
-        FullScanPanel {
+        title: qsTr("Fast scan")
+        FastScanPanel {
 
         }
     }
@@ -25,8 +25,6 @@ TabView {
 
     MeasureSettings {
         id: measureSettings
-        startAngle: 27
-        stopAngle: 42
     }
 }
 

@@ -8,7 +8,8 @@ SOURCES += main.cpp \
     QuickCurve.cpp \
     MainWindow.cpp \
     FileManager.cpp \
-    MeasureSettings.cpp
+    MeasureSettings.cpp \
+    Processor.cpp
 
 RESOURCES += qml.qrc
 
@@ -23,7 +24,8 @@ HEADERS += \
     QuickCurve.h \
     MainWindow.h \
     FileManager.h \
-    MeasureSettings.h
+    MeasureSettings.h \
+    Processor.h
 
 INCLUDEPATH += $$PWD/Libs/qwt/include
 

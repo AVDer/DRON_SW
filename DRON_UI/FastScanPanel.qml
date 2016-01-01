@@ -15,8 +15,8 @@ Grid {
     TextField {
         id: f_start_angle
         text: measureSettings.startAngle
-        onAccepted: {
-            f_start_angle.focus = false
+        onTextChanged: {
+            //f_start_angle.focus = false
             measureSettings.startAngle = f_start_angle.text
         }
     }
@@ -26,8 +26,8 @@ Grid {
     TextField {
         id: f_stop_angle
         text: measureSettings.stopAngle
-        onAccepted: {
-            f_stop_angle.focus = false
+        onTextChanged: {
+            //f_stop_angle.focus = false
             measureSettings.stopAngle = f_stop_angle.text
         }
     }

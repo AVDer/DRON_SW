@@ -4,9 +4,7 @@
 #include <QFileDialog>
 
 FileManager::FileManager(QObject *parent) :
-    QObject(parent),
-    directory_(""),
-    filename_("")
+    QObject(parent)
 {
 
 }
@@ -21,3 +19,6 @@ void FileManager::setFilename(QString filename) {
         emit directoryChanged();
     }
 }
+
+QString FileManager::directory_;
+QString FileManager::filename_;

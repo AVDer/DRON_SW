@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     view->setSource(QUrl("qrc:/main.qml"));
 
     setCentralWidget(container);
-
 }
 
 MainWindow::~MainWindow()

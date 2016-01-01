@@ -6,11 +6,11 @@ Rectangle {
     smooth: true
 
     property string button_text: "Push me"
+    property int button_id: 0
 
     signal buttonClick()
 
     Text {
-        id: buttonLabel
         anchors.centerIn: parent
         text: button_text
         color: "black"
@@ -23,7 +23,8 @@ Rectangle {
     MouseArea{
         id: buttonMouseArea
         anchors.fill: parent
-        onClicked: buttonClick()
+        //onClicked: buttonClick()
+        onClicked: processor.processButtons(button_id)
         hoverEnabled: true
         onEntered: parent.border.color = "black"
         onExited:  parent.border.color = "white"

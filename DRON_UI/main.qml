@@ -3,6 +3,8 @@ import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.2
 
+import dron.Processor 1.0
+
 Rectangle {
     id: root
     anchors.fill: parent
@@ -92,6 +94,10 @@ Rectangle {
         }
     ]
     //! [transitions]
+
+    Processor {
+        id: processor
+    }
 
 }
 
