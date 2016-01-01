@@ -27,7 +27,7 @@ QuickQwtPlot::QuickQwtPlot(QQuickItem *parent)  : QQuickPaintedItem(parent)
     canvas->setPalette(canvasPalette);
     mPlot->setCanvas(canvas);
 
-    mPlot->setAutoReplot(true);
+    mPlot->setAutoReplot(true);   
 }
 
 QuickQwtPlot::~QuickQwtPlot()
@@ -104,4 +104,40 @@ QString QuickQwtPlot::title() const
 void QuickQwtPlot::setTitle(QString arg)
 {
     mPlot->setTitle(arg);
+}
+
+double QuickQwtPlot::xMin() const {
+    return x_min_;
+}
+
+void QuickQwtPlot::setXMin(double x_min) {
+    x_min_ = x_min;
+    mPlot->setAxisScale(QwtPlot::xBottom, x_min_, x_max_);
+}
+
+double QuickQwtPlot::xMax() const {
+    return x_max_;
+}
+
+void QuickQwtPlot::setXMax(double x_max) {
+    x_max_ = x_max;
+    mPlot->setAxisScale(QwtPlot::xBottom, x_min_, x_max_);
+}
+
+double QuickQwtPlot::yMin() const {
+    return y_min_;
+}
+
+void QuickQwtPlot::setYMin(double y_min) {
+    y_min_ = y_min;
+    mPlot->setAxisScale(QwtPlot::yLeft, y_min_, y_max_);
+}
+
+double QuickQwtPlot::yMax() const {
+    return y_max_;
+}
+
+void QuickQwtPlot::setYMax(double y_max) {
+    y_max_ = y_max;
+    mPlot->setAxisScale(QwtPlot::yLeft, y_min_, y_max_);
 }

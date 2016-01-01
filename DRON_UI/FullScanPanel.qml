@@ -17,7 +17,6 @@ Grid {
         id: n_start_angle
         text: measureSettings.startAngle
         onTextChanged: {
-            //n_start_angle.focus = false
             measureSettings.startAngle = n_start_angle.text
         }
     }
@@ -28,7 +27,6 @@ Grid {
         id: n_stop_angle
         text: measureSettings.stopAngle
         onTextChanged: {
-            //n_stop_angle.focus = false
             measureSettings.stopAngle = n_stop_angle.text
         }
     }
@@ -39,7 +37,6 @@ Grid {
         id: step_input
         text: measureSettings.step
         onTextChanged: {
-            //step_input.focus = false
             measureSettings.step = step_input.text
         }
     }
@@ -50,7 +47,6 @@ Grid {
         id: exp_input
         text: measureSettings.exposition
         onTextChanged: {
-            //exp_input.focus = false
             measureSettings.exposition = exp_input.text
         }
     }

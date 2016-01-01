@@ -6,12 +6,12 @@
 class MeasureSettings : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(double startAngle READ startAngle WRITE setStartAngle NOTIFY startAngleChanged())
+    Q_PROPERTY(double startAngle READ startAngle WRITE setStartAngle NOTIFY startAngleChanged)
     Q_PROPERTY(double stopAngle READ stopAngle WRITE setStopAngle NOTIFY stopAngleChanged)
-    Q_PROPERTY(double step READ step WRITE setStep)
-    Q_PROPERTY(double exposition READ exposition WRITE setExposition)
-    Q_PROPERTY(double brakeTime READ brakeTime WRITE setBrakeTime)
-    Q_PROPERTY(double delay READ delay WRITE setDelay)
+    Q_PROPERTY(double step READ step WRITE setStep NOTIFY stepChanged)
+    Q_PROPERTY(double exposition READ exposition WRITE setExposition NOTIFY expositionChanged)
+    Q_PROPERTY(double brakeTime READ brakeTime WRITE setBrakeTime NOTIFY brakeTimeChanged)
+    Q_PROPERTY(double delay READ delay WRITE setDelay NOTIFY delayChanged)
 
 public:
     explicit MeasureSettings(QObject *parent = 0);
@@ -69,6 +69,10 @@ public:
 signals:
     void startAngleChanged();
     void stopAngleChanged();
+    void stepChanged();
+    void expositionChanged();
+    void brakeTimeChanged();
+    void delayChanged();
 
 public slots:
 
