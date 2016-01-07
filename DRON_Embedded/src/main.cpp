@@ -11,6 +11,7 @@
 
 #include "Timer.h"
 #include "BlinkLed.h"
+#include "UART.h"
 
 // ----------------------------------------------------------------------------
 //
@@ -43,12 +44,12 @@
 // Definitions visible only within this translation unit.
 namespace
 {
-  // ----- Timing definitions -------------------------------------------------
+// ----- Timing definitions -------------------------------------------------
 
-  // Keep the LED on for 2/3 of a second.
-  constexpr Timer::ticks_t BLINK_ON_TICKS = Timer::FREQUENCY_HZ * 3 / 4;
-  constexpr Timer::ticks_t BLINK_OFF_TICKS = Timer::FREQUENCY_HZ
-      - BLINK_ON_TICKS;
+// Keep the LED on for 2/3 of a second.
+constexpr Timer::ticks_t BLINK_ON_TICKS = Timer::FREQUENCY_HZ * 3 / 4;
+constexpr Timer::ticks_t BLINK_OFF_TICKS = Timer::FREQUENCY_HZ
+		- BLINK_ON_TICKS;
 }
 
 // ----- main() ---------------------------------------------------------------
@@ -60,33 +61,41 @@ namespace
 #pragma GCC diagnostic ignored "-Wmissing-declarations"
 #pragma GCC diagnostic ignored "-Wreturn-type"
 
-int main(void)
-{
-  Timer timer;
-  timer.start();
+int main(void) {
+	Timer timer;
+	timer.start();
 
-  BlinkLed blinkLed;
+	BlinkLed blinkLed;
+	UART uart_1;
 
-  // Perform all necessary initialisations for the LED.
-  blinkLed.powerUp();
+	// Perform all necessary initialisations for the LED.
+	blinkLed.powerUp();
 
-  uint32_t seconds = 0;
+	uint32_t seconds = 0;
 
-  // Infinite loop
-  while (1)
-    {
-      blinkLed.turnOn();
-      timer.sleep(seconds== 0 ? Timer::FREQUENCY_HZ : BLINK_ON_TICKS);
+	// Infinite loop
+	while (true) {
+		uart_1.send_byte('H');
+		uart_1.send_byte('e');
+		uart_1.send_byte('l');
+		uart_1.send_byte('l');
+		uart_1.send_byte('o');
+		uart_1.send_byte('\n');
+		uart_1.send_byte('\r');
 
-      blinkLed.turnOff();
-      timer.sleep(BLINK_OFF_TICKS);
 
-      ++seconds;
+		blinkLed.turnOn();
+		timer.sleep(seconds== 0 ? Timer::FREQUENCY_HZ : BLINK_ON_TICKS);
 
-      // Count seconds on the trace device.
-      trace_printf("Second %u\n", seconds);
-    }
-  // Infinite loop, never return.
+		blinkLed.turnOff();
+		timer.sleep(BLINK_OFF_TICKS);
+
+		++seconds;
+
+		// Count seconds on the trace device.
+		trace_printf("Second %u\n", seconds);
+	}
+	// Infinite loop, never return.
 }
 
 #pragma GCC diagnostic pop
