@@ -9,9 +9,10 @@
 #include <stdlib.h>
 #include "diag/Trace.h"
 
-#include "Timer.h"
+#include "DrvADC.h"
 #include "BlinkLed.h"
 #include "UART.h"
+#include "Timer.h"
 
 // ----------------------------------------------------------------------------
 //
@@ -67,33 +68,25 @@ int main(void) {
 
 	BlinkLed blinkLed;
 	UART uart_1;
+	Drv_ADC adc_2;
 
 	// Perform all necessary initialisations for the LED.
 	blinkLed.powerUp();
 
-	uint32_t seconds = 0;
-
 	// Infinite loop
 	while (true) {
-		uart_1.send_byte('H');
-		uart_1.send_byte('e');
-		uart_1.send_byte('l');
-		uart_1.send_byte('l');
-		uart_1.send_byte('o');
+		uint16_t adc_value = adc_2.get_adc_value();
+		uart_1.send_byte(adc_value >> 8);
+		uart_1.send_byte(adc_value);
 		uart_1.send_byte('\n');
 		uart_1.send_byte('\r');
 
 
 		blinkLed.turnOn();
-		timer.sleep(seconds== 0 ? Timer::FREQUENCY_HZ : BLINK_ON_TICKS);
+		timer.sleep(BLINK_ON_TICKS);
 
 		blinkLed.turnOff();
 		timer.sleep(BLINK_OFF_TICKS);
-
-		++seconds;
-
-		// Count seconds on the trace device.
-		trace_printf("Second %u\n", seconds);
 	}
 	// Infinite loop, never return.
 }
