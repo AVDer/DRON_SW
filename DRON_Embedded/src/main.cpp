@@ -68,14 +68,15 @@ int main(void) {
 
 	BlinkLed blinkLed;
 	UART uart_1;
-	Drv_ADC adc_2;
+	Drv_ADC adc_1;
+	adc_1.start();
 
 	// Perform all necessary initialisations for the LED.
 	blinkLed.powerUp();
 
 	// Infinite loop
 	while (true) {
-		uint16_t adc_value = adc_2.get_adc_value();
+		uint16_t adc_value = adc_1.get_adc_value();
 		uart_1.send_byte(adc_value >> 8);
 		uart_1.send_byte(adc_value);
 		uart_1.send_byte('\n');
