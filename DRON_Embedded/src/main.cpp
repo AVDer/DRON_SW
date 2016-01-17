@@ -12,6 +12,7 @@
 #include "DrvADC.h"
 #include "BlinkLed.h"
 #include "UART.h"
+#include "TimePulser.h"
 #include "Timer.h"
 
 // ----------------------------------------------------------------------------
@@ -62,13 +63,19 @@ constexpr Timer::ticks_t BLINK_OFF_TICKS = Timer::FREQUENCY_HZ
 #pragma GCC diagnostic ignored "-Wmissing-declarations"
 #pragma GCC diagnostic ignored "-Wreturn-type"
 
-int main(void) {
-	Timer timer;
-	timer.start();
+BlinkLed blinkLed;
+void blink_func(uint32_t c) {
+  (c % 2) ? blinkLed.turnOn() : blinkLed.turnOff();
+}
 
-	BlinkLed blinkLed;
+int main(void) {
+
 	UART uart_1;
 	Drv_ADC adc_1;
+	time_pulse.init();
+	time_pulse.set_function(blink_func);
+	time_pulse.set_timeout(5000);
+	time_pulse.start();
 	adc_1.start();
 
 	// Perform all necessary initialisations for the LED.
@@ -83,11 +90,7 @@ int main(void) {
 		uart_1.send_byte('\r');
 
 
-		blinkLed.turnOn();
-		timer.sleep(BLINK_ON_TICKS);
 
-		blinkLed.turnOff();
-		timer.sleep(BLINK_OFF_TICKS);
 	}
 	// Infinite loop, never return.
 }

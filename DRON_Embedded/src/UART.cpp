@@ -54,42 +54,6 @@ void USART1_IRQHandler(void) {
 		USART_ClearITPendingBit(USART1, USART_IT_RXNE);
 		UART::receive_byte(USART_ReceiveData(USART1));
 	}
-
-	/*
-      if(USART_GetITStatus(USART1,USART_IT_RXNE)!=RESET) {
-        UsartInterruptFeature<1>::_usartInstance->UsartInterruptEventSender.raiseEvent(UsartEventType::EVENT_RECEIVE);
-        USART_ClearITPendingBit(USART1,USART_IT_RXNE);
-      }
-      else if(USART_GetITStatus(USART1,USART_IT_TXE)!=RESET) {
-        UsartInterruptFeature<1>::_usartInstance->UsartInterruptEventSender.raiseEvent(UsartEventType::EVENT_READY_TO_TRANSMIT);
-        USART_ClearITPendingBit(USART1,USART_IT_TXE);
-      }
-      else if(USART_GetITStatus(USART1,USART_IT_TC)!=RESET) {
-        UsartInterruptFeature<1>::_usartInstance->UsartInterruptEventSender.raiseEvent(UsartEventType::EVENT_TRANSMIT_COMPLETE);
-        USART_ClearITPendingBit(USART1,USART_IT_TC);
-      }
-      else if(USART_GetITStatus(USART1,USART_IT_PE)!=RESET) {
-        UsartInterruptFeature<1>::_usartInstance->UsartInterruptEventSender.raiseEvent(UsartEventType::EVENT_PARITY_ERROR);
-        USART_ClearITPendingBit(USART1,USART_IT_PE);
-      }
-      else if(USART_GetITStatus(USART1,USART_IT_IDLE)!=RESET) {
-        UsartInterruptFeature<1>::_usartInstance->UsartInterruptEventSender.raiseEvent(UsartEventType::EVENT_IDLE);
-        USART_ClearITPendingBit(USART1,USART_IT_IDLE);
-      }
-      else if(USART_GetITStatus(USART1,USART_IT_LBD)!=RESET) {
-        UsartInterruptFeature<1>::_usartInstance->UsartInterruptEventSender.raiseEvent(UsartEventType::EVENT_LINE_BREAK_DETECT);
-        USART_ClearITPendingBit(USART1,USART_IT_LBD);
-      }
-      else if(USART_GetITStatus(USART1,USART_IT_CTS)!=RESET) {
-        UsartInterruptFeature<1>::_usartInstance->UsartInterruptEventSender.raiseEvent(UsartEventType::EVENT_CLEAR_TO_SEND);
-        USART_ClearITPendingBit(USART1,USART_IT_CTS);
-      }
-      else if(USART_GetITStatus(USART1,USART_IT_ERR)!=RESET) {
-        UsartInterruptFeature<1>::_usartInstance->UsartInterruptEventSender.raiseEvent(UsartEventType::EVENT_ERROR);
-        USART_ClearITPendingBit(USART1,USART_IT_ERR);
-      }
-      __DSB();      // prevent erroneous recall of this handler due to delayed memory write
-	 */
 }
 
 }
