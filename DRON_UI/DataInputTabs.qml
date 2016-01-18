@@ -23,6 +23,8 @@ TabView {
         }
     }
 
+
+
     MeasureSettings {
         id: measureSettings
     }

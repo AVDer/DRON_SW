@@ -75,20 +75,20 @@ void Drv_ADC::adc_init() {
 
 void Drv_ADC::dma_config() {
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
-  DMA_InitTypeDef DMA_InitStructure;
+  DMA_InitTypeDef dma_init_struct;
 
-  DMA_InitStructure.DMA_PeripheralBaseAddr = kADC1_Data_Address;
-  DMA_InitStructure.DMA_MemoryBaseAddr = reinterpret_cast<uint32_t>(&adc_data);
-  DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;
-  DMA_InitStructure.DMA_BufferSize = kADC_Buffer_Size;
-  DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
-  DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
-  DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
-  DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
-  DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
-  DMA_InitStructure.DMA_Priority = DMA_Priority_High;
-  DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
+  dma_init_struct.DMA_PeripheralBaseAddr = kADC1_Data_Address;
+  dma_init_struct.DMA_MemoryBaseAddr = reinterpret_cast<uint32_t>(&adc_data);
+  dma_init_struct.DMA_DIR = DMA_DIR_PeripheralSRC;
+  dma_init_struct.DMA_BufferSize = kADC_Buffer_Size;
+  dma_init_struct.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+  dma_init_struct.DMA_MemoryInc = DMA_MemoryInc_Enable;
+  dma_init_struct.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
+  dma_init_struct.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
+  dma_init_struct.DMA_Mode = DMA_Mode_Circular;
+  dma_init_struct.DMA_Priority = DMA_Priority_Low;
+  dma_init_struct.DMA_M2M = DMA_M2M_Disable;
 
-  DMA_Init(DMA1_Channel1, &DMA_InitStructure);
+  DMA_Init(DMA1_Channel1, &dma_init_struct);
   DMA_Cmd(DMA1_Channel1, ENABLE);
 }

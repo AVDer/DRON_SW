@@ -9,7 +9,9 @@ SOURCES += main.cpp \
     MainWindow.cpp \
     FileManager.cpp \
     MeasureSettings.cpp \
-    Processor.cpp
+    Processor.cpp \
+    Communication.cpp \
+    Serial.cpp
 
 RESOURCES += qml.qrc
 
@@ -25,7 +27,8 @@ HEADERS += \
     MainWindow.h \
     FileManager.h \
     MeasureSettings.h \
-    Processor.h
+    Processor.h \
+    Communication.h
 
 INCLUDEPATH += $$PWD/Libs/qwt/include
 
@@ -35,7 +38,10 @@ unix {
 LIBS += -lqwt
 }
 win32 {
-LIBS += -lqwtd
+LIBS += -lqwt# -lQt5ExtSerialPort
 }
 
 DISTFILES +=
+
+include($$PWD/Libs/qextserialport/qextserialport.pri)
+

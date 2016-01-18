@@ -12,9 +12,9 @@ using namespace std;
 
 #include "Serial.h"
 
-Serial::Serial(tstring &commPortName, int bitRate)
+Serial::Serial(const QString &commPortName, int bitRate)
 {
-	commHandle = CreateFile(commPortName.c_str(), GENERIC_READ|GENERIC_WRITE, 0,NULL, OPEN_EXISTING, 
+    commHandle = CreateFile((wchar_t *)commPortName.utf16(), GENERIC_READ|GENERIC_WRITE, 0,NULL, OPEN_EXISTING,
 		0, NULL);
 
 	if(commHandle == INVALID_HANDLE_VALUE) 
@@ -28,7 +28,6 @@ Serial::Serial(tstring &commPortName, int bitRate)
 		DCB dcb;
 		if(!SetCommTimeouts(commHandle,&cto))
 		{
-			Serial::~Serial();
 			throw("ERROR: Could not set com port time-outs");
 		}
 
@@ -46,7 +45,6 @@ Serial::Serial(tstring &commPortName, int bitRate)
 
 		if(!SetCommState(commHandle,&dcb))
 		{
-			Serial::~Serial();
 			throw("ERROR: Could not set com port parameters");
 		}
 	}
@@ -60,7 +58,7 @@ Serial::~Serial()
 int Serial::write(const char *buffer)
 {
 	DWORD numWritten;
-	WriteFile(commHandle, buffer, strlen(buffer), &numWritten, NULL); 
+    WriteFile(commHandle, buffer, strlen(buffer), &numWritten, NULL);
 
 	return numWritten;
 }

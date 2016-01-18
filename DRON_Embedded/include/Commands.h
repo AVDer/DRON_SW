@@ -15,6 +15,7 @@ const uint8_t kMessageSize = 8;
 
 enum Commands {
 	cmd_start = 0,
+	cmd_exposition,
 	cmd_sync = 0xFF
 };
 
@@ -24,6 +25,7 @@ using Message = union Message_{
 		uint32_t data;
 	} data;
 	uint8_t raw_data[kMessageSize];
+        char chars[kMessageSize];
 };
 
 #endif /* COMMANDS_H_ */

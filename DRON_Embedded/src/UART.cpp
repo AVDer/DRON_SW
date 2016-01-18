@@ -41,11 +41,37 @@ UART::UART() {
 	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);  //включаем нужное прерывание щас нам прием
 
 	USART_Cmd(USART1, ENABLE);
+	USART_DMACmd(USART1, USART_DMAReq_Tx, ENABLE);
+}
+
+void UART::dma_config(uint32_t buffer_address, uint8_t buffer_size) {
+	dma_buffer_address_ = buffer_address;
+	dma_buffer_size_ = buffer_size;
+	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
+	DMA_InitTypeDef dma_init_struct;
+	DMA_StructInit(&dma_init_struct);
+	dma_init_struct.DMA_PeripheralBaseAddr = (uint32_t)&(USART1->DR);
+	dma_init_struct.DMA_MemoryBaseAddr = buffer_address;
+	dma_init_struct.DMA_DIR = DMA_DIR_PeripheralDST;
+	dma_init_struct.DMA_BufferSize = buffer_size;
+	dma_init_struct.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+	dma_init_struct.DMA_MemoryInc = DMA_MemoryInc_Enable;
+	dma_init_struct.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+	dma_init_struct.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+	dma_init_struct.DMA_Priority = DMA_Priority_High;
+	DMA_Init(DMA1_Channel4, &dma_init_struct);
 }
 
 void UART::send_byte(uint8_t byte) {
 	while(!(USART1->SR & USART_SR_TC));
 	USART1->DR = byte;
+}
+
+void UART::fire_dma() {
+	DMA1_Channel4->CCR &= (uint16_t)(~DMA_CCR1_EN);
+	DMA1_Channel4->CMAR = dma_buffer_address_;
+	DMA1_Channel4->CNDTR = dma_buffer_size_;
+	DMA1_Channel4->CCR |= DMA_CCR1_EN;
 }
 
 void UART::register_rx_func(ByteReceiveFunc f) {

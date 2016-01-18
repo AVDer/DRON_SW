@@ -46,9 +46,7 @@ public:
         return exposition_;
     }
 
-    void setExposition(double exposition) {
-        exposition_ = exposition;
-    }
+    void setExposition(double exposition);
 
     double brakeTime() const {
         return brake_time_;

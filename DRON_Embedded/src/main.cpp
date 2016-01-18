@@ -13,6 +13,7 @@
 #include "delay.h"
 #include "DrvADC.h"
 #include "BlinkLed.h"
+#include "Processor.h"
 #include "UART.h"
 #include "TimePulser.h"
 #include "Timer.h"
@@ -75,9 +76,10 @@ int main(void) {
 	Drv_ADC adc_1;
 	time_pulse.init();
 	time_pulse.set_function(blink_func);
-	time_pulse.set_timeout(5000);
+	time_pulse.set_timeout(1000);
 	time_pulse.start();
 	adc_1.start();
+	get_processor();
 
 	// Perform all necessary initialisations for the LED.
 	blinkLed.powerUp();
@@ -86,7 +88,7 @@ int main(void) {
 	while (true) {
 		uint16_t adc_value = adc_1.get_adc_value();
 		get_communication().send_data(27, adc_value);
-		Delay::ms(1000);
+		Delay::ms(5000);
 	}
 	// Infinite loop, never return.
 }

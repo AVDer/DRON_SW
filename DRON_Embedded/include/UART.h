@@ -28,10 +28,14 @@ public:
 	UART();
 
 	void send_byte(uint8_t byte);
+	void fire_dma();
 	void register_rx_func(ByteReceiveFunc f);
+	void dma_config(uint32_t buffer_address, uint8_t buffer_size);
 	void receive_byte(uint8_t byte);
 private:
 	ByteReceiveFunc f_ = nullptr;
+	uint32_t dma_buffer_address_ = 0;
+	uint8_t dma_buffer_size_ = 0;
 };
 
 #endif /* UART_H_ */
