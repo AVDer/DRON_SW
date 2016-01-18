@@ -18,12 +18,20 @@
 
 // ----------------------------------------------------------------------------
 
+class UART;
+UART& get_uart_1();
+
+using ByteReceiveFunc = void (*)(uint8_t);
+
 class UART {
 public:
 	UART();
 
 	void send_byte(uint8_t byte);
-	static void receive_byte(uint8_t byte);
+	void register_rx_func(ByteReceiveFunc f);
+	void receive_byte(uint8_t byte);
+private:
+	ByteReceiveFunc f_ = nullptr;
 };
 
 #endif /* UART_H_ */

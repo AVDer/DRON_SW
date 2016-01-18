@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include "diag/Trace.h"
 
+#include "Communication.h"
+#include "delay.h"
 #include "DrvADC.h"
 #include "BlinkLed.h"
 #include "UART.h"
@@ -69,8 +71,7 @@ void blink_func(uint32_t c) {
 }
 
 int main(void) {
-
-	UART uart_1;
+	Delay::init();
 	Drv_ADC adc_1;
 	time_pulse.init();
 	time_pulse.set_function(blink_func);
@@ -84,13 +85,8 @@ int main(void) {
 	// Infinite loop
 	while (true) {
 		uint16_t adc_value = adc_1.get_adc_value();
-		uart_1.send_byte(adc_value >> 8);
-		uart_1.send_byte(adc_value);
-		uart_1.send_byte('\n');
-		uart_1.send_byte('\r');
-
-
-
+		get_communication().send_data(27, adc_value);
+		Delay::ms(1000);
 	}
 	// Infinite loop, never return.
 }

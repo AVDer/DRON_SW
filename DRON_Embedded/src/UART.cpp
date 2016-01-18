@@ -7,6 +7,11 @@
 
 #include "UART.h"
 
+UART& get_uart_1() {
+	static UART uart_1;
+	return uart_1;
+}
+
 UART::UART() {
 	GPIO_InitTypeDef PORTA_init_struct;
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_USART1, ENABLE);
@@ -43,16 +48,21 @@ void UART::send_byte(uint8_t byte) {
 	USART1->DR = byte;
 }
 
+void UART::register_rx_func(ByteReceiveFunc f) {
+	f_ = f;
+}
+
 void UART::receive_byte(uint8_t byte) {
-	volatile uint8_t a;
-	a = byte;
+	if (f_) {
+		f_(byte);
+	}
 }
 
 extern "C" {
 void USART1_IRQHandler(void) {
 	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) {
 		USART_ClearITPendingBit(USART1, USART_IT_RXNE);
-		UART::receive_byte(USART_ReceiveData(USART1));
+		get_uart_1().receive_byte(USART_ReceiveData(USART1));
 	}
 }
 
