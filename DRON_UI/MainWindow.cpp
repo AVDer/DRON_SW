@@ -5,7 +5,7 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
-    resize(1200, 900);
+    showMaximized();
     view = new QQuickView();
     container = QWidget::createWindowContainer(view, this);
     view->setSource(QUrl("qrc:/main.qml"));
