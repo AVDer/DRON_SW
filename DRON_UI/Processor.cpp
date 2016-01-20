@@ -13,8 +13,8 @@ Processor::Processor(QObject *parent) : QObject(parent) {
 }
 
 void Processor::processButtons(int button_number) {
-    if (button_number == 1) { // Start button
-        QMessageBox::information(nullptr, "Title", QString::number(measure_settings_.exposition_));
+    if (button_number/* == 1*/) { // Start button
+        QMessageBox::information(nullptr, "Title", QString::number(measure_settings_.mode_));
     }
 }
 

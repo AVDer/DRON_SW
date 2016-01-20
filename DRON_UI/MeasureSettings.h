@@ -20,6 +20,7 @@ struct MeasureSettings
     double brake_time_;
     double delay_;
     QString selected_port_;
+    int mode_;
 
     QList<QextPortInfo> ports_list_;
     QStringList port_names_list_;

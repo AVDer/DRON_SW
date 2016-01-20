@@ -17,6 +17,7 @@ class Processor : public QObject
     Q_PROPERTY(double delay READ delay WRITE setDelay NOTIFY delayChanged)
     Q_PROPERTY(QStringList com_port_names READ com_port_names)
     Q_PROPERTY(QString selectedPort WRITE setSelectedPort)
+    Q_PROPERTY(int mode WRITE setMode)
 
 public:
     explicit Processor(QObject *parent = 0);
@@ -80,6 +81,10 @@ public:
 
     void setDelay(double delay) {
         measure_settings_.delay_ = delay;
+    }
+
+    void setMode(int mode) {
+        measure_settings_.mode_ = mode;
     }
 
 

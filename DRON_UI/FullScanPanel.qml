@@ -40,7 +40,7 @@ Grid {
             processor.step = step_input.text
         }
     }
-    Text {text: qsTr("°")}
+    Text {text: qsTr("x 0.01°")}
 
     Text {text: qsTr("Exposition")}
     TextField {

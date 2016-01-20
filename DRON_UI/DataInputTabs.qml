@@ -7,23 +7,24 @@ Item {
         anchors.fill: parent
 
         Tab {
+            onVisibleChanged: { if (visible) processor.mode = 1 }
             title: qsTr("Point scan")
             FullScanPanel {
 
             }
         }
         Tab {
-            title: qsTr("Fast scan")
+            onVisibleChanged: { if (visible) processor.mode = 2 }
+            title: qsTr("Integral scan")
             FastScanPanel {
 
             }
         }
         Tab {
-            title: "Settings"
+            title: qsTr("Settings")
             SettingsPanel {
 
             }
         }
     }
-
 }
