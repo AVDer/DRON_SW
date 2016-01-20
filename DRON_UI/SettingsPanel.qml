@@ -20,10 +20,10 @@ GridLayout {
     Text {text: qsTr("Braking time")}
     TextField {
         id: break_input
-        text: measureSettings.brakeTime
+        text: processor.brakeTime
         onTextChanged: {
             //break_input.focus = false
-            measureSettings.brakeTime = break_input.text
+            processor.brakeTime = break_input.text
         }
     }
     Text {text: qsTr("ms")}
@@ -31,10 +31,10 @@ GridLayout {
     Text {text: qsTr("Delay")}
     TextField {
         id: delay_input
-        text: measureSettings.delay
+        text: processor.delay
         onTextChanged: {
             //delay_input.focus = false
-            measureSettings.delay = delay_input.text
+            processor.delay = delay_input.text
         }
     }
     Text {text: qsTr("s")}
@@ -59,10 +59,10 @@ GridLayout {
     Text {text: qsTr("Port")}
     ComboBox {
         id: port_selection_box
-        model: measureSettings.com_port_names
+        model: processor.com_port_names
         Layout.columnSpan: 2
         Layout.fillWidth: true
-        onCurrentTextChanged: measureSettings.selectedPort = currentText
+        onCurrentTextChanged: processor.selectedPort = currentText
     }
 
     FileManager {

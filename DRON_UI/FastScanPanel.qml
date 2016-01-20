@@ -14,10 +14,10 @@ Grid {
     Text {text: qsTr("Start angle")}
     TextField {
         id: f_start_angle
-        text: measureSettings.startAngle
+        text: processor.startAngle
         onTextChanged: {
             //f_start_angle.focus = false
-            measureSettings.startAngle = f_start_angle.text
+            processor.startAngle = f_start_angle.text
         }
     }
     Text {text: qsTr("°")}
@@ -25,10 +25,10 @@ Grid {
     Text {text: qsTr("Stop angle")}
     TextField {
         id: f_stop_angle
-        text: measureSettings.stopAngle
+        text: processor.stopAngle
         onTextChanged: {
             //f_stop_angle.focus = false
-            measureSettings.stopAngle = f_stop_angle.text
+            processor.stopAngle = f_stop_angle.text
         }
     }
     Text {text: qsTr("°")}

@@ -1,8 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.2
 
-import dron.MeasureSettings 1.0
-
 Item {
     TabView {
         z: -1
@@ -25,11 +23,6 @@ Item {
             SettingsPanel {
 
             }
-        }
-
-
-        MeasureSettings {
-            id: measureSettings
         }
     }
 

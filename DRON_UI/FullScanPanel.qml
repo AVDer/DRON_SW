@@ -15,9 +15,9 @@ Grid {
     Text {text: qsTr("Start angle")}
     TextField {
         id: n_start_angle
-        text: measureSettings.startAngle
+        text: processor.startAngle
         onTextChanged: {
-            measureSettings.startAngle = n_start_angle.text
+            processor.startAngle = n_start_angle.text
         }
     }
     Text {text: qsTr("°")}
@@ -25,9 +25,9 @@ Grid {
     Text {text: qsTr("Stop angle")}
     TextField {
         id: n_stop_angle
-        text: measureSettings.stopAngle
+        text: processor.stopAngle
         onTextChanged: {
-            measureSettings.stopAngle = n_stop_angle.text
+            processor.stopAngle = n_stop_angle.text
         }
     }
     Text {text: qsTr("°")}
@@ -35,9 +35,9 @@ Grid {
     Text {text: qsTr("Step")}
     TextField {
         id: step_input
-        text: measureSettings.step
+        text: processor.step
         onTextChanged: {
-            measureSettings.step = step_input.text
+            processor.step = step_input.text
         }
     }
     Text {text: qsTr("°")}
@@ -45,9 +45,9 @@ Grid {
     Text {text: qsTr("Exposition")}
     TextField {
         id: exp_input
-        text: measureSettings.exposition
+        text: processor.exposition
         onTextChanged: {
-            measureSettings.exposition = exp_input.text
+            processor.exposition = exp_input.text
         }
     }
     Text {text: qsTr("s")}
