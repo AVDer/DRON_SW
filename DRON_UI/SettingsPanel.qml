@@ -56,6 +56,15 @@ GridLayout {
         onClicked: fileDialog.open()
     }
 
+    Text {text: qsTr("Port")}
+    ComboBox {
+        id: port_selection_box
+        model: measureSettings.com_port_names
+        Layout.columnSpan: 2
+        Layout.fillWidth: true
+        onCurrentTextChanged: measureSettings.selectedPort = currentText
+    }
+
     FileManager {
         id: file_manager
     }

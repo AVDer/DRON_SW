@@ -2,6 +2,9 @@
 #define MEASURESETTINGS_H
 
 #include <QObject>
+#include <QMessageBox>
+
+#include "libs/qextserialport/qextserialenumerator.h"
 
 class MeasureSettings : public QObject
 {
@@ -12,9 +15,22 @@ class MeasureSettings : public QObject
     Q_PROPERTY(double exposition READ exposition WRITE setExposition NOTIFY expositionChanged)
     Q_PROPERTY(double brakeTime READ brakeTime WRITE setBrakeTime NOTIFY brakeTimeChanged)
     Q_PROPERTY(double delay READ delay WRITE setDelay NOTIFY delayChanged)
+    Q_PROPERTY(QStringList com_port_names READ com_port_names)
+    Q_PROPERTY(QString selectedPort WRITE setSelectedPort)
 
 public:
     explicit MeasureSettings(QObject *parent = 0);
+
+    void scan_com_ports();
+
+    QStringList com_port_names() const
+    {
+        return port_names_list_;
+    }
+
+    void setSelectedPort(QString port) {
+        QMessageBox::information(nullptr, "Title", port);
+    }
 
     double startAngle() const {
         return start_angle_;
@@ -42,11 +58,13 @@ public:
         step_ = step;
     }
 
-    double exposition() const {
-        return exposition_;
+    void setExposition(double exposition) {
+        exposition_ = exposition;
     }
 
-    void setExposition(double exposition);
+    static double exposition() {
+        return exposition_;
+    }
 
     double brakeTime() const {
         return brake_time_;
@@ -78,9 +96,14 @@ private:
     double start_angle_;
     double stop_angle_;
     double step_;
-    double exposition_;
+    static double exposition_;
     double brake_time_;
     double delay_;
+    static QString selected_port_;
+
+    QList<QextPortInfo> ports_list_;
+    QStringList port_names_list_;
+    std::map<QString, QString> ports_map_;
 };
 
 #endif // MEASURESETTINGS_H

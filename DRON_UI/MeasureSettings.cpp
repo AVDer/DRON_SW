@@ -1,18 +1,21 @@
 #include "MeasureSettings.h"
 
-#include "../DRON_Embedded/include/Commands.h"
-#include "Serial.h"
-
-MeasureSettings::MeasureSettings(QObject *parent) : QObject(parent)
-{
-
+MeasureSettings::MeasureSettings(QObject *parent) : QObject(parent) {
+    scan_com_ports();
 }
 
-void MeasureSettings::setExposition(double exposition) {
-    exposition_ = exposition;
-    Message message;
-    message.data.command = cmd_exposition;
-    message.data.data = static_cast<uint32_t>(exposition * 1000);
-    Serial port("COM5");
-    port.write(message.chars, kMessageSize);
+void MeasureSettings::scan_com_ports() {
+    ports_list_ = QextSerialEnumerator::getPorts();
+    for (const QextPortInfo& port : ports_list_) {
+        if (port.portName.contains("COM"))
+            ports_map_[port.friendName] = port.portName;
+    }
+    port_names_list_.clear();
+    for (const auto& e : ports_map_)
+        port_names_list_.append(e.first);
+    //if (portsList.count())
+    //    selectedPort = portsMap[comPortComboBox->currentText()];
 }
+
+double MeasureSettings::exposition_;
+QString MeasureSettings::selected_port_;

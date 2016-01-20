@@ -3,30 +3,34 @@ import QtQuick.Controls 1.2
 
 import dron.MeasureSettings 1.0
 
-TabView {
-    Tab {
-        title: qsTr("Point scan")
-        FullScanPanel {
+Item {
+    TabView {
+        z: -1
+        anchors.fill: parent
 
+        Tab {
+            title: qsTr("Point scan")
+            FullScanPanel {
+
+            }
+        }
+        Tab {
+            title: qsTr("Fast scan")
+            FastScanPanel {
+
+            }
+        }
+        Tab {
+            title: "Settings"
+            SettingsPanel {
+
+            }
+        }
+
+
+        MeasureSettings {
+            id: measureSettings
         }
     }
-    Tab {
-        title: qsTr("Fast scan")
-        FastScanPanel {
 
-        }
-    }
-    Tab {
-        title: "Settings"
-        SettingsPanel {
-
-        }
-    }
-
-
-
-    MeasureSettings {
-        id: measureSettings
-    }
 }
-

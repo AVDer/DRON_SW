@@ -78,7 +78,7 @@ Rectangle {
         },
         State {
             name: "SETTINGS_CLOSED"
-            PropertyChanges { target: dataTab; x: 0 }
+            PropertyChanges { target: dataTab; x: -1000 }
             PropertyChanges { target: graphPanel; width: mainLayout.width - arrowDrawer.width}
             PropertyChanges { target: arrowIcon; rotation: 270 }
         }

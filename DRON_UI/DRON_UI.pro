@@ -10,8 +10,7 @@ SOURCES += main.cpp \
     FileManager.cpp \
     MeasureSettings.cpp \
     Processor.cpp \
-    Communication.cpp \
-    Serial.cpp
+    Communication.cpp
 
 RESOURCES += qml.qrc
 
@@ -38,7 +37,7 @@ unix {
 LIBS += -lqwt
 }
 win32 {
-LIBS += -lqwt# -lQt5ExtSerialPort
+LIBS += -lqwt
 }
 
 DISTFILES +=
