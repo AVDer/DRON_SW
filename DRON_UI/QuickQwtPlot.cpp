@@ -27,7 +27,12 @@ QuickQwtPlot::QuickQwtPlot(QQuickItem *parent)  : QQuickPaintedItem(parent)
     canvas->setPalette(canvasPalette);
     mPlot->setCanvas(canvas);
 
-    mPlot->setAutoReplot(true);   
+    mPlot->setAutoReplot(true);
+    grid_ = new QwtPlotGrid;
+    grid_->attach(mPlot);
+    magnifier_ = new QwtPlotMagnifier(mPlot->canvas());
+    panner_ = new QwtPlotPanner(mPlot->canvas());
+    get_graph_curve()->set_plot(this);
 }
 
 QuickQwtPlot::~QuickQwtPlot()

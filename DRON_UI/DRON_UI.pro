@@ -10,7 +10,8 @@ SOURCES += main.cpp \
     FileManager.cpp \
     MeasureSettings.cpp \
     Processor.cpp \
-    Communication.cpp
+    Communication.cpp \
+    GraphCurve.cpp
 
 RESOURCES += qml.qrc
 
@@ -27,7 +28,8 @@ HEADERS += \
     FileManager.h \
     MeasureSettings.h \
     Processor.h \
-    Communication.h
+    Communication.h \
+    GraphCurve.h
 
 INCLUDEPATH += $$PWD/Libs/qwt/include
 

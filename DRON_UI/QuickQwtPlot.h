@@ -3,6 +3,12 @@
 
 #include <QQuickPaintedItem>
 
+#include "Libs/qwt/include/qwt_plot_magnifier.h"
+#include "Libs/qwt/include/qwt_plot_panner.h"
+#include "Libs/qwt/include/qwt_plot_grid.h"
+
+#include "GraphCurve.h"
+
 class QwtPlot;
 
 class QuickQwtPlot : public QQuickPaintedItem
@@ -57,6 +63,9 @@ signals:
 
 private:
     QwtPlot *mPlot;
+    QwtPlotMagnifier* magnifier_;
+    QwtPlotPanner* panner_;
+    QwtPlotGrid* grid_;
     double x_min_ = 0;
     double x_max_ = 1000;
     double y_min_ = 0;
