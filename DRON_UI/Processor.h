@@ -23,6 +23,8 @@ public:
     explicit Processor(QObject *parent = 0);
 
     Q_INVOKABLE void processButtons(int button_number);
+    Q_INVOKABLE void lineStyleChanged(int style);
+    Q_INVOKABLE void lineSizeChanged(int size);
 
     QStringList com_port_names() const
     {

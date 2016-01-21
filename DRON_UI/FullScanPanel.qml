@@ -16,6 +16,7 @@ Grid {
     TextField {
         id: n_start_angle
         text: processor.startAngle
+        validator: DoubleValidator {}
         onTextChanged: {
             processor.startAngle = n_start_angle.text
         }
@@ -26,6 +27,7 @@ Grid {
     TextField {
         id: n_stop_angle
         text: processor.stopAngle
+        validator: DoubleValidator {}
         onTextChanged: {
             processor.stopAngle = n_stop_angle.text
         }
@@ -36,6 +38,7 @@ Grid {
     TextField {
         id: step_input
         text: processor.step
+        validator: DoubleValidator {}
         onTextChanged: {
             processor.step = step_input.text
         }
@@ -46,6 +49,7 @@ Grid {
     TextField {
         id: exp_input
         text: processor.exposition
+        validator: DoubleValidator {}
         onTextChanged: {
             processor.exposition = exp_input.text
         }

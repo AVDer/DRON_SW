@@ -6,6 +6,7 @@
 #include "Libs/qwt/include/qwt_plot_magnifier.h"
 #include "Libs/qwt/include/qwt_plot_panner.h"
 #include "Libs/qwt/include/qwt_plot_grid.h"
+#include "Libs/qwt/include/qwt_symbol.h"
 
 #include "GraphCurve.h"
 
@@ -29,6 +30,8 @@ public:
     ~QuickQwtPlot();
 
     void paint(QPainter *painter);
+
+    Q_INVOKABLE void setAutoScale();
 
     QwtPlot *getPlot();
 

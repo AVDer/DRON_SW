@@ -14,7 +14,7 @@ Processor::Processor(QObject *parent) : QObject(parent) {
 }
 
 void Processor::processButtons(int button_number) {
-    static double i = 1;
+    static double i = 0;
     if (button_number/* == 1*/) { // Start button
         //QMessageBox::information(nullptr, "Title", QString::number(measure_settings_.mode_));
         get_graph_curve()->add_point(i, i*i);
@@ -22,3 +22,10 @@ void Processor::processButtons(int button_number) {
     }
 }
 
+void Processor::lineStyleChanged(int style) {
+    get_graph_curve()->set_style(style);
+}
+
+void Processor::lineSizeChanged(int size) {
+    get_graph_curve()->set_size(size);
+}

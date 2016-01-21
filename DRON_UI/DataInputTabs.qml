@@ -8,14 +8,14 @@ Item {
 
         Tab {
             onVisibleChanged: { if (visible) processor.mode = 1 }
-            title: qsTr("Point scan")
+            title: qsTr("Point")
             FullScanPanel {
 
             }
         }
         Tab {
             onVisibleChanged: { if (visible) processor.mode = 2 }
-            title: qsTr("Integral scan")
+            title: qsTr("Integral")
             FastScanPanel {
 
             }
@@ -23,6 +23,12 @@ Item {
         Tab {
             title: qsTr("Settings")
             SettingsPanel {
+
+            }
+        }
+        Tab {
+            title: qsTr("Line")
+            LinePanel {
 
             }
         }

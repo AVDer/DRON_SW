@@ -21,8 +21,8 @@ GridLayout {
     TextField {
         id: break_input
         text: processor.brakeTime
+        validator: DoubleValidator {}
         onTextChanged: {
-            //break_input.focus = false
             processor.brakeTime = break_input.text
         }
     }
@@ -32,8 +32,8 @@ GridLayout {
     TextField {
         id: delay_input
         text: processor.delay
+        validator: DoubleValidator {}
         onTextChanged: {
-            //delay_input.focus = false
             processor.delay = delay_input.text
         }
     }

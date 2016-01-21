@@ -17,6 +17,11 @@ Item {
         titleYLeft: qsTr("Intensity")
     }
 
+    MouseArea {
+        anchors.fill: qwt_plot
+        onDoubleClicked: qwt_plot.setAutoScale()
+    }
+
     LimitsInput {
         id: x_min
         anchors.left: qwt_plot.left

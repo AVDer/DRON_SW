@@ -16,7 +16,7 @@ QuickQwtPlot::QuickQwtPlot(QQuickItem *parent)  : QQuickPaintedItem(parent)
     connect(this, SIGNAL(heightChanged()), this, SLOT(heightChanged()));
     connect(this, SIGNAL(widthChanged()), this, SLOT(widthChanged()));
 
-    mPlot->insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
+    //mPlot->insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
 
     // canvas
     QwtPlotCanvas *canvas = new QwtPlotCanvas();
@@ -30,8 +30,8 @@ QuickQwtPlot::QuickQwtPlot(QQuickItem *parent)  : QQuickPaintedItem(parent)
     mPlot->setAutoReplot(true);
     grid_ = new QwtPlotGrid;
     grid_->attach(mPlot);
-    magnifier_ = new QwtPlotMagnifier(mPlot->canvas());
-    panner_ = new QwtPlotPanner(mPlot->canvas());
+    /*magnifier_ = new QwtPlotMagnifier(mPlot->canvas());
+    panner_ = new QwtPlotPanner(mPlot->canvas());*/
     get_graph_curve()->set_plot(this);
 }
 
@@ -145,4 +145,10 @@ double QuickQwtPlot::yMax() const {
 void QuickQwtPlot::setYMax(double y_max) {
     y_max_ = y_max;
     mPlot->setAxisScale(QwtPlot::yLeft, y_min_, y_max_);
+}
+
+void QuickQwtPlot::setAutoScale() {
+    mPlot->setAxisAutoScale(QwtPlot::yLeft, true);
+    mPlot->setAxisAutoScale(QwtPlot::xBottom, true);
+    update();
 }
