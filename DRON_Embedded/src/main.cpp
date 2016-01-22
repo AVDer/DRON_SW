@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include "diag/Trace.h"
 
-#include "Communication.h"
 #include "delay.h"
 #include "DrvADC.h"
 #include "BlinkLed.h"
@@ -88,7 +87,8 @@ int main(void) {
 	while (true) {
 		uint16_t adc_value = adc_1.get_adc_value();
 		get_communication().send_data(27, adc_value);
-		Delay::ms(5000);
+		get_processor().run();
+		Delay::ms(3000);
 	}
 	// Infinite loop, never return.
 }

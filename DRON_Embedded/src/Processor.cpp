@@ -27,3 +27,8 @@ void Processor::message_received(const std::pair<uint32_t, uint32_t>& message) {
 		break;
 	}
 }
+
+void Processor::run() {
+	auto a = pulse_counter_.get_counter();
+	exposition_ = a;
+}
