@@ -14,7 +14,7 @@
 #include "UART.h"
 
 class Communication;
-Communication& get_communication();
+Communication* get_communication();
 
 using MessageReceiveFunc = void (*)(const std::pair<uint32_t, uint32_t>&);
 
@@ -22,7 +22,7 @@ class Communication {
 public:
 	Communication();
 	// ----------------------------------------------------------------------------
-	static void wrap_byte_received(uint8_t byte) {get_communication().byte_received(byte);}
+	static void wrap_byte_received(uint8_t byte) {get_communication()->byte_received(byte);}
 
 	void send_data(uint32_t data_type, uint32_t data_value);
 	bool is_message_ready() const {return message_ready_;};

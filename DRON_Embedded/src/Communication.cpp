@@ -9,14 +9,14 @@
 
 #include <algorithm>
 
-Communication& get_communication() {
+Communication* get_communication() {
 	static Communication communication;
-	return communication;
+	return &communication;
 }
 
 Communication::Communication() {
-	get_uart_1().register_rx_func(Communication::wrap_byte_received);
-	get_uart_1().dma_config(reinterpret_cast<uint32_t>(out_message_.raw_data), kMessageSize);
+	uart_1.register_rx_func(Communication::wrap_byte_received);
+	uart_1.dma_config(reinterpret_cast<uint32_t>(out_message_.raw_data), kMessageSize);
 }
 
 void Communication::register_message_func(MessageReceiveFunc f) {
@@ -26,7 +26,7 @@ void Communication::register_message_func(MessageReceiveFunc f) {
 void Communication::send_data(uint32_t data_type, uint32_t data_value) {
 	out_message_.data.command = data_type;
 	out_message_.data.data = data_value;
-	get_uart_1().fire_dma();
+	uart_1.fire_dma();
 }
 
 void Communication::byte_received(uint8_t byte) {

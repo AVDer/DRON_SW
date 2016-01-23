@@ -7,10 +7,7 @@
 
 #include "UART.h"
 
-UART& get_uart_1() {
-	static UART uart_1;
-	return uart_1;
-}
+UART uart_1;
 
 UART::UART() {
 	GPIO_InitTypeDef PORTA_init_struct;
@@ -79,7 +76,7 @@ void UART::register_rx_func(ByteReceiveFunc f) {
 }
 
 void UART::receive_byte(uint8_t byte) {
-	if (f_) {
+	if (f_ != nullptr) {
 		f_(byte);
 	}
 }
@@ -88,7 +85,7 @@ extern "C" {
 void USART1_IRQHandler(void) {
 	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) {
 		USART_ClearITPendingBit(USART1, USART_IT_RXNE);
-		get_uart_1().receive_byte(USART_ReceiveData(USART1));
+		uart_1.receive_byte(USART_ReceiveData(USART1));
 	}
 }
 

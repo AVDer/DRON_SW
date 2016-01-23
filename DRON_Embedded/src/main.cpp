@@ -72,23 +72,21 @@ void blink_func(uint32_t c) {
 
 int main(void) {
 	Delay::init();
-	Drv_ADC adc_1;
+	get_processor();
+	//Drv_ADC adc_1;
 	time_pulse.init();
 	time_pulse.set_function(blink_func);
 	time_pulse.set_timeout(1000);
 	time_pulse.start();
-	adc_1.start();
-	get_processor();
+	//adc_1.start();
 
 	// Perform all necessary initialisations for the LED.
 	blinkLed.powerUp();
 
 	// Infinite loop
 	while (true) {
-		uint16_t adc_value = adc_1.get_adc_value();
-		get_communication().send_data(27, adc_value);
-		get_processor().run();
-		Delay::ms(3000);
+		Delay::ms(1000);
+		get_processor()->run();
 	}
 	// Infinite loop, never return.
 }

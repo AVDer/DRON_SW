@@ -19,7 +19,7 @@
 // ----------------------------------------------------------------------------
 
 class UART;
-UART& get_uart_1();
+extern UART uart_1;
 
 using ByteReceiveFunc = void (*)(uint8_t);
 

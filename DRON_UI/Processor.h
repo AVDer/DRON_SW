@@ -3,8 +3,11 @@
 
 #include <QObject>
 #include <QMessageBox>
+#include <QTimer>
 
 #include "MeasureSettings.h"
+
+#include "Libs/qextserialport/qextserialport.h"
 
 class Processor : public QObject
 {
@@ -21,6 +24,7 @@ class Processor : public QObject
 
 public:
     explicit Processor(QObject *parent = 0);
+    ~Processor();
 
     Q_INVOKABLE void processButtons(int button_number);
     Q_INVOKABLE void lineStyleChanged(int style);
@@ -32,7 +36,7 @@ public:
     }
 
     void setSelectedPort(QString port) {
-        QMessageBox::information(nullptr, "Title", measure_settings_.ports_map_[port]);
+        measure_settings_.selected_port_ = measure_settings_.ports_map_[port];
     }
 
     double startAngle() const {
@@ -99,9 +103,12 @@ signals:
     void delayChanged();
 
 public slots:
+    void dataUpdate();
 
 private:
     MeasureSettings measure_settings_;
+    QextSerialPort com_port_;
+    QTimer timer_;
 };
 
 #endif // PROCESSOR_H

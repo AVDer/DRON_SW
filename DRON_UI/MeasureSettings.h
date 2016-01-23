@@ -7,7 +7,7 @@
 #include <QString>
 #include <QStringList>
 
-#include "libs/qextserialport/qextserialenumerator.h"
+#include "Libs/qextserialport/qextserialenumerator.h"
 
 struct MeasureSettings
 {

@@ -15,7 +15,9 @@ const uint8_t kMessageSize = 8;
 
 enum Commands {
 	cmd_start = 0,
+	cmd_stop,
 	cmd_exposition,
+	cmd_analog_data,
 	cmd_sync = 0xFF
 };
 
