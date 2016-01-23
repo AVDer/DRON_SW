@@ -65,27 +65,27 @@ constexpr Timer::ticks_t BLINK_OFF_TICKS = Timer::FREQUENCY_HZ
 #pragma GCC diagnostic ignored "-Wmissing-declarations"
 #pragma GCC diagnostic ignored "-Wreturn-type"
 
+/*
 BlinkLed blinkLed;
 void blink_func(uint32_t c) {
   (c % 2) ? blinkLed.turnOn() : blinkLed.turnOff();
 }
+*/
 
 int main(void) {
 	Delay::init();
 	get_processor();
-	//Drv_ADC adc_1;
+	/*
 	time_pulse.init();
 	time_pulse.set_function(blink_func);
 	time_pulse.set_timeout(1000);
 	time_pulse.start();
-	//adc_1.start();
-
+*/
 	// Perform all necessary initialisations for the LED.
-	blinkLed.powerUp();
+	//blinkLed.powerUp();
 
 	// Infinite loop
 	while (true) {
-		Delay::ms(1000);
 		get_processor()->run();
 	}
 	// Infinite loop, never return.

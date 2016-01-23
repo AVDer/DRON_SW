@@ -18,6 +18,7 @@ public:
     GraphCurve();
     void set_plot(QuickQwtPlot* plot);
     void add_point(double x, double y);
+    void clear();
     void set_style(int style);
     void set_size(int size);
     std::pair<double, double> axis_x_range();

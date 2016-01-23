@@ -1,6 +1,8 @@
 #ifndef PROCESSOR_H
 #define PROCESSOR_H
 
+#include <queue>
+
 #include <QObject>
 #include <QMessageBox>
 #include <QTimer>
@@ -8,6 +10,7 @@
 #include "MeasureSettings.h"
 
 #include "Libs/qextserialport/qextserialport.h"
+#include "../DRON_Embedded/include/Commands.h"
 
 class Processor : public QObject
 {
@@ -106,9 +109,12 @@ public slots:
     void dataUpdate();
 
 private:
+    void sendMessage(uint32_t command, uint32_t data);
+
     MeasureSettings measure_settings_;
     QextSerialPort com_port_;
     QTimer timer_;
+    std::queue<Message> message_queue_;
 };
 
 #endif // PROCESSOR_H

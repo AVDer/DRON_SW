@@ -16,9 +16,27 @@ const uint8_t kMessageSize = 8;
 enum Commands {
 	cmd_start = 0,
 	cmd_stop,
+	cmd_counts,
+	cmd_step,
+	cmd_direction,
 	cmd_exposition,
-	cmd_analog_data,
+	cmd_break_time,
+	cmd_delay,
+	cmd_sw_version,
 	cmd_sync = 0xFF
+};
+
+enum Mode {
+	mode_stop = 0,
+	mode_points,
+	mode_integral,
+	mode_justice
+};
+
+enum Direction {
+	dir_none = 0,
+	dir_forward,
+	dir_backward
 };
 
 using Message = union Message_{

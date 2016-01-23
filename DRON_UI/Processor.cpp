@@ -2,12 +2,11 @@
 
 #include <QDebug>
 #include <QMessageBox>
+#include <QThread>
 
 #include "FileManager.h"
 #include "GraphCurve.h"
 #include "MeasureSettings.h"
-
-#include "../DRON_Embedded/include/Commands.h"
 
 Processor::Processor(QObject *parent) : QObject(parent) {
     measure_settings_.scan_com_ports();
@@ -19,7 +18,7 @@ Processor::~Processor() {
 }
 
 void Processor::processButtons(int button_number) {
-    Message out_message;
+
     switch (button_number) {
     case 1: // Start button
         com_port_.setBaudRate(BAUD115200);
@@ -29,16 +28,22 @@ void Processor::processButtons(int button_number) {
         com_port_.setPortName(measure_settings_.selected_port_);
         com_port_.open(QIODevice::ReadWrite);
 
-        out_message.data.command = cmd_start;
-        out_message.data.data = measure_settings_.mode_;
-        com_port_.write(out_message.chars, kMessageSize);
+        sendMessage(cmd_direction,
+                    (measure_settings_.start_angle_ < measure_settings_.stop_angle_) ?
+                        Direction::dir_forward : Direction::dir_backward);
+
+        sendMessage(cmd_counts,
+                    fabs(measure_settings_.start_angle_ - measure_settings_.stop_angle_) /
+                    measure_settings_.step_ * 2.);
+
+        sendMessage(cmd_exposition, measure_settings_.exposition_ * 1000.);
+        sendMessage(cmd_start, measure_settings_.mode_);
 
         timer_.start(500);
+        get_graph_curve()->clear();
         break;
     case 3: // Stop button
-        out_message.data.command = cmd_stop;
-        out_message.data.data = 0;
-        com_port_.write(out_message.chars, kMessageSize);
+        sendMessage(cmd_stop, 0);
         com_port_.close();
     }
 }
@@ -47,6 +52,12 @@ void Processor::dataUpdate() {
     int read_index = 0;
     char c;
     Message in_message;
+    if (!message_queue_.empty()) {
+        if (com_port_.isOpen()) {
+            com_port_.write(message_queue_.front().chars, kMessageSize);
+            message_queue_.pop();
+        }
+    }
     while (com_port_.bytesAvailable() > 0) {
         com_port_.getChar(&c);
         in_message.chars[read_index] = c;
@@ -55,6 +66,15 @@ void Processor::dataUpdate() {
             get_graph_curve()->add_point(in_message.data.command, in_message.data.data);
         }
     }
+}
+
+void Processor::sendMessage(uint32_t command, uint32_t data)
+{
+    Message out_message;
+    out_message.data.command = command;
+    out_message.data.data = data;
+    qDebug() << command << '\t' << data;
+    message_queue_.push(out_message);
 }
 
 void Processor::lineStyleChanged(int style) {

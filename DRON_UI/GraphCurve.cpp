@@ -23,6 +23,14 @@ void GraphCurve::add_point(double x, double y) {
     curve_->setSamples(data_x.data(), data_y.data(), data_x.size());
     plot_->update();
 }
+
+void GraphCurve::clear() {
+    data_x.clear();
+    data_y.clear();
+    curve_->setSamples(data_x.data(), data_y.data(), data_x.size());
+    plot_->update();
+}
+
 void GraphCurve::set_style(int style) {
     style_ = style;
     if (style_ == 1) {

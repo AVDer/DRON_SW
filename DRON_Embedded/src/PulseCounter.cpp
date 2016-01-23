@@ -22,14 +22,16 @@ void PulseCounter::reset_counter() {
 }
 
 uint16_t PulseCounter::get_counter() {
-	return TIM2->CNT;
+	uint16_t counter_value = TIM2->CNT;
+	TIM2->CNT = 0;
+	return counter_value;
 }
 
 void PulseCounter::gpio_init() {
 	GPIO_InitTypeDef io_init_struct;
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
-	io_init_struct.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1;
+	io_init_struct.GPIO_Pin = GPIO_Pin_1;
 	io_init_struct.GPIO_Speed = GPIO_Speed_50MHz;
 	io_init_struct.GPIO_Mode = GPIO_Mode_IN_FLOATING;
 	GPIO_Init(GPIOA, &io_init_struct);
