@@ -28,6 +28,7 @@ public:
 	void message_received(const std::pair<uint32_t, uint32_t>& message);
 	void run();
 	void tick_event() {tick_event_ = true;}
+	bool tick_processed() { return !tick_event_; }
 private:
 	bool running() {return mode_ != mode_stop;}
 	void move_motor();
@@ -47,6 +48,7 @@ private:
 	uint32_t breaking_time_ {};
 	uint32_t delay_ {};
 	uint32_t angle_counter_ {};
+	uint32_t step_counter_ {};
 };
 
 #endif /* PROCESSOR_H_ */

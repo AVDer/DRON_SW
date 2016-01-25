@@ -53,21 +53,22 @@ void Processor::interrupt_init() {
 
 void Processor::message_received(const std::pair<uint32_t, uint32_t>& message) {
 	switch (message.first) {
-	case cmd_start:
+	case Commands::cmd_start:
 		mode_ = message.second;
 		angle_counter_ = 0;
+		step_counter_ = 0;
 		move_motor();
 		break;
-	case cmd_stop:
+	case Commands::cmd_stop:
 		mode_ = mode_stop;
 		break;
-	case cmd_counts:
+	case Commands::cmd_counts:
 		counts_ = message.second;
 		break;
-	case cmd_step:
+	case Commands::cmd_step:
 		step_ = message.second;
 		break;
-	case cmd_direction:
+	case Commands::cmd_direction:
 		if (message.second == 1) {
 			direction_ = Direction::dir_forward;
 		}
@@ -78,19 +79,17 @@ void Processor::message_received(const std::pair<uint32_t, uint32_t>& message) {
 			direction_ = Direction::dir_none;
 		}
 		break;
-	case cmd_exposition:
+	case Commands::cmd_exposition:
 		exposition_ = message.second;
 		break;
-	case cmd_break_time:
+	case Commands::cmd_break_time:
 		breaking_time_ = message.second;
 		break;
-	case cmd_delay:
+	case Commands::cmd_delay:
 		delay_ = message.second;
 		break;
-	case cmd_sw_version:
-		if (!running()) {
-			get_communication()->send_data(cmd_sw_version, kSWVersion);
-		}
+	case Commands::cmd_sw_version:
+		get_communication()->send_data(Commands::cmd_sw_version, kSWVersion);
 		break;
 	default:
 		break;
@@ -113,17 +112,18 @@ void Processor::run() {
 	if (!tick_event_ || !running()) {
 		return;
 	}
-	tick_event_ = false;
 	if (mode_ == mode_points) { // Point scan
-		motor_control_.stop();
-		Delay::ms(breaking_time_);
-		motor_control_.release();
-		Delay::ms(delay_);
-		pulse_counter_.reset_counter();
-		Delay::ms(exposition_);
-		get_communication()->send_data(angle_counter_, pulse_counter_.get_counter());
-		move_motor();
-
+		if (++step_counter_ >= step_) {
+			step_counter_ = 0;
+			motor_control_.stop();
+			Delay::ms(breaking_time_);
+			motor_control_.release();
+			Delay::ms(delay_);
+			pulse_counter_.reset_counter();
+			Delay::ms(exposition_);
+			get_communication()->send_data(angle_counter_, pulse_counter_.get_counter());
+			move_motor();
+		}
 	}
 	else if (mode_ == mode_integral || mode_ == mode_justice) {
 		get_communication()->send_data(angle_counter_, adc_.get_adc_value());
@@ -131,11 +131,15 @@ void Processor::run() {
 	if (++angle_counter_ >= counts_) {
 		mode_ = mode_stop;
 	}
+	tick_event_ = false;
 }
 
 extern "C" void EXTI1_IRQHandler(void)
 {
 	if(EXTI_GetITStatus(EXTI_Line1) != RESET) {
+		if (!get_processor()->tick_processed()) {
+			get_communication()->send_data(Commands::cmd_alarm, Alarms::alarm_too_fast);
+		}
 		get_processor()->tick_event();
 		EXTI_ClearITPendingBit(EXTI_Line1);
 	}

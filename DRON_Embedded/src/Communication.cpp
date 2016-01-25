@@ -30,16 +30,16 @@ void Communication::send_data(uint32_t data_type, uint32_t data_value) {
 }
 
 void Communication::byte_received(uint8_t byte) {
-	if (is_sync_mode_ && byte == cmd_sync) {
+	if (is_sync_mode_ && byte == Commands::cmd_sync) {
 		return;
 	}
-	if (byte != cmd_sync) {
+	if (byte != Commands::cmd_sync) {
 		is_sync_mode_ = false;
 	}
 	in_message_.raw_data[read_index_] = byte;
 	if (++read_index_ >= kMessageSize) {
 		read_index_ = 0;
-		if (std::all_of(std::begin(in_message_.raw_data), std::end(in_message_.raw_data), [](uint8_t b){return b == cmd_sync;})) {
+		if (in_message_.data.command == Commands::cmd_sync_32 && in_message_.data.data == Commands::cmd_sync_32) {
 			is_sync_mode_ = true;
 		}
 		else {

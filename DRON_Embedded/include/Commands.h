@@ -22,8 +22,15 @@ enum Commands {
 	cmd_exposition,
 	cmd_break_time,
 	cmd_delay,
-	cmd_sw_version,
-	cmd_sync = 0xFF
+	cmd_sync = 0xFF,
+	cmd_sw_version = 0xFFFFFFFD,
+	cmd_alarm = 0xFFFFFFFE,
+	cmd_sync_32 = 0xFFFFFFFF
+};
+
+enum Alarms {
+	alarm_no = 0,
+	alarm_too_fast
 };
 
 enum Mode {

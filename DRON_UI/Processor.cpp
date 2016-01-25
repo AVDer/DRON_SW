@@ -57,9 +57,10 @@ void Processor::processButtons(int button_number) {
 
         sendMessage(cmd_counts,
                     fabs(measure_settings_.start_angle_ - measure_settings_.stop_angle_) /
-                    measure_settings_.step_ * 2.);
+                    measure_settings_.step_ * 100.);
 
         sendMessage(cmd_exposition, measure_settings_.exposition_ * 1000.);
+        sendMessage(cmd_step, measure_settings_.step_ * 2);
         sendMessage(cmd_start, measure_settings_.mode_);
 
         timer_.start(500);
@@ -77,6 +78,7 @@ void Processor::dataUpdate() {
     Message in_message;
     if (!message_queue_.empty()) {
         if (com_port_.isOpen()) {
+            qDebug() << message_queue_.front().data.command << '\t' << message_queue_.front().data.data;
             com_port_.write(message_queue_.front().chars, kMessageSize);
             message_queue_.pop();
         }
@@ -86,7 +88,14 @@ void Processor::dataUpdate() {
         in_message.chars[read_index] = c;
         if (++read_index >= kMessageSize) {
             read_index = 0;
-            get_graph_curve()->add_point(in_message.data.command, in_message.data.data);
+            if (in_message.data.command == Commands::cmd_alarm) {
+                QMessageBox::information(nullptr, "Alarm", "Too fast");
+            }
+            else {
+                get_graph_curve()->add_point(measure_settings_.start_angle_ +
+                                             measure_settings_.step_ * in_message.data.command / 100.,
+                                             in_message.data.data);
+            }
         }
     }
 }
@@ -96,7 +105,6 @@ void Processor::sendMessage(uint32_t command, uint32_t data)
     Message out_message;
     out_message.data.command = command;
     out_message.data.data = data;
-    qDebug() << command << '\t' << data;
     message_queue_.push(out_message);
 }
 
