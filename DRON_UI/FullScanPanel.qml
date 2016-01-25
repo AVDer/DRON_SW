@@ -55,12 +55,4 @@ Grid {
         }
     }
     Text {text: qsTr("s")}
-
-    Settings {
-        property alias start_angle: n_start_angle.text
-        property alias stop_angle: n_stop_angle.text
-        property alias step: step_input.text
-        property alias exposition: exp_input.text
-    }
-
 }

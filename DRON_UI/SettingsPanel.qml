@@ -82,11 +82,4 @@ GridLayout {
             }
         }
     }
-
-    Settings {
-        property alias break_time: break_input.text
-        property alias delay: delay_input.text
-        property alias work_dir: file_dir_part.text
-        property alias work_file: file_file_part.text
-    }
 }

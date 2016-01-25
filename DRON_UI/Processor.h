@@ -1,10 +1,12 @@
 #ifndef PROCESSOR_H
 #define PROCESSOR_H
 
+#include <memory>
 #include <queue>
 
 #include <QObject>
 #include <QMessageBox>
+#include <QSettings>
 #include <QTimer>
 
 #include "MeasureSettings.h"
@@ -114,6 +116,7 @@ private:
     MeasureSettings measure_settings_;
     QextSerialPort com_port_;
     QTimer timer_;
+    std::unique_ptr<QSettings> settings_;
     std::queue<Message> message_queue_;
 };
 

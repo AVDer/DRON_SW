@@ -22,6 +22,10 @@ public:
         return filename_;
     }
 
+    static QString full_filename() {
+        return full_filename_;
+    }
+
     void setFilename(QString filename);
 
 signals:
@@ -31,6 +35,7 @@ signals:
 public slots:
 
 private:
+    static QString full_filename_;
     static QString directory_;
     static QString filename_;
 };

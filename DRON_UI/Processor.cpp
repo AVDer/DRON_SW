@@ -8,13 +8,36 @@
 #include "GraphCurve.h"
 #include "MeasureSettings.h"
 
-Processor::Processor(QObject *parent) : QObject(parent) {
+Processor::Processor(QObject *parent) :
+    QObject(parent),
+    settings_(new QSettings("StarCon", "DRON Control"))
+{
     measure_settings_.scan_com_ports();
     connect(&timer_, SIGNAL(timeout()), SLOT(dataUpdate()));
+    measure_settings_.start_angle_ =
+            settings_->value("measurement/start_angle", 0).toDouble();
+    measure_settings_.stop_angle_ =
+            settings_->value("measurement/stop_angle", 90).toDouble();
+    measure_settings_.step_ =
+            settings_->value("measurement/step", 1).toDouble();
+    measure_settings_.exposition_ =
+            settings_->value("measurement/exposition", 2).toDouble();
+    measure_settings_.brake_time_ =
+            settings_->value("measurement/brake_time", 1).toDouble();
+    measure_settings_.delay_ =
+            settings_->value("measurement/delay", 1).toDouble();
+    //FileManager::setFilename(settings_->value("data/filename").toString);
 }
 
 Processor::~Processor() {
     com_port_.close();
+    settings_->setValue("measurement/start_angle", measure_settings_.start_angle_);
+    settings_->setValue("measurement/stop_angle", measure_settings_.stop_angle_);
+    settings_->setValue("measurement/step", measure_settings_.step_);
+    settings_->setValue("measurement/exposition", measure_settings_.exposition_);
+    settings_->setValue("settings/brake_time", measure_settings_.brake_time_);
+    settings_->setValue("settings/delay", measure_settings_.delay_);
+    settings_->setValue("data/filename", FileManager::full_filename());
 }
 
 void Processor::processButtons(int button_number) {
