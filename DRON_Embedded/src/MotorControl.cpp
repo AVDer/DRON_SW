@@ -16,27 +16,27 @@ MotorControl::MotorControl() {
 }
 
 void MotorControl::forawrd() {
-	GPIO_ResetBits(kStopPort, kStopPin);
-	GPIO_ResetBits(kBackwardPort, kBackwardPin);
-	GPIO_SetBits(kForwardPort, kForwardPin);
+	GPIO_SetBits(kStopPort, kStopPin);
+	GPIO_SetBits(kBackwardPort, kBackwardPin);
+	GPIO_ResetBits(kForwardPort, kForwardPin);
 }
 
 void MotorControl::bacward() {
-	GPIO_ResetBits(kStopPort, kStopPin);
-	GPIO_ResetBits(kForwardPort, kForwardPin);
-	GPIO_SetBits(kBackwardPort, kBackwardPin);
+	GPIO_SetBits(kStopPort, kStopPin);
+	GPIO_SetBits(kForwardPort, kForwardPin);
+	GPIO_ResetBits(kBackwardPort, kBackwardPin);
 }
 
 void MotorControl::stop() {
-	GPIO_ResetBits(kForwardPort, kForwardPin);
-	GPIO_ResetBits(kBackwardPort, kBackwardPin);
-	GPIO_SetBits(kStopPort, kStopPin);
+	GPIO_SetBits(kForwardPort, kForwardPin);
+	GPIO_SetBits(kBackwardPort, kBackwardPin);
+	GPIO_ResetBits(kStopPort, kStopPin);
 }
 
 void MotorControl::release() {
-	GPIO_ResetBits(kStopPort, kStopPin);
-	GPIO_ResetBits(kForwardPort, kForwardPin);
-	GPIO_ResetBits(kBackwardPort, kBackwardPin);
+	GPIO_SetBits(kStopPort, kStopPin);
+	GPIO_SetBits(kForwardPort, kForwardPin);
+	GPIO_SetBits(kBackwardPort, kBackwardPin);
 }
 
 void MotorControl::open_damper() {

@@ -6,9 +6,10 @@
 #include <queue>
 
 #include <QDebug>
-#include <QMessageBox>
+#include <QtMultimedia/QMediaPlayer>
 #include <QObject>
 #include <QSettings>
+#include <QSound>
 #include <QTimer>
 
 #include "FileManager.h"
@@ -66,7 +67,7 @@ public:
 
     void setStopAngle(QString stop_angle) {
         measure_settings_.stop_angle_ = stop_angle.toDouble();
-        qDebug() << stop_angle;
+        //qDebug() << stop_angle;
         emit stopAngleChanged();
     }
 
@@ -142,11 +143,13 @@ private:
     void prepareFileHeader();
     void prepareFileFooter();
 
+    QMediaPlayer media_player_;
+    QTimer timer_;
     FileManager file_manager_;
     MeasureSettings measure_settings_;
+
     QextSerialPort com_port_;
     std::ofstream data_file_;
-    QTimer timer_;
     std::unique_ptr<QSettings> settings_;
     std::queue<Message> message_queue_;
     QString adc_value_ = 0;

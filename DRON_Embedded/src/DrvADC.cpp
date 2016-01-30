@@ -48,6 +48,7 @@ uint16_t Drv_ADC::get_adc_value() {
 
 void Drv_ADC::gpio_init() {
   GPIO_InitTypeDef io_init_struct;
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
   io_init_struct.GPIO_Pin = GPIO_Pin_1;

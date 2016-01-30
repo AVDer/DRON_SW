@@ -57,9 +57,11 @@ void Processor::message_received(const std::pair<uint32_t, uint32_t>& message) {
 		angle_counter_ = 0;
 		step_counter_ = 0;
 		move_motor();
+		motor_control_.open_damper();
 		mode_ = message.second;
 		break;
 	case Commands::cmd_stop:
+		motor_control_.close_damper();
 		mode_ = Mode::mode_stop;
 		direction_ = Direction::dir_none;
 		move_motor();
@@ -115,29 +117,34 @@ void Processor::run() {
 		return;
 	}
 	if (mode_ == Mode::mode_points && !tick_processed()) { // Point scan
-		if (++step_counter_ >= step_) {
-			step_counter_ = 0;
-			motor_control_.stop();
-			Delay::ms(breaking_time_);
-			motor_control_.release();
-			Delay::ms(delay_);
-			pulse_counter_.reset_counter();
-			Delay::ms(exposition_);
-			get_communication()->send_data(angle_counter_, pulse_counter_.get_counter());
-			move_motor();
+		if (angle_counter_ < counts_) {
+			if (++step_counter_ >= step_) {
+				step_counter_ = 0;
+				motor_control_.stop();
+				Delay::ms(breaking_time_);
+				motor_control_.release();
+				Delay::ms(delay_);
+				pulse_counter_.reset_counter();
+				Delay::ms(exposition_);
+				get_communication()->send_data(angle_counter_, pulse_counter_.get_counter());
+				move_motor();
+			}
 		}
-		if (++angle_counter_ >= counts_) {
+		else {
+			motor_control_.close_damper();
 			mode_ = Mode::mode_stop;
 			direction_ = Direction::dir_none;
 			move_motor();
 			get_communication()->send_data(Commands::cmd_measurement_stopped, 0);
 		}
+		++angle_counter_;
 	}
 	else if (mode_ == Mode::mode_integral && !tick_processed()) {
 		if (angle_counter_ < counts_) {
 			get_communication()->send_data(angle_counter_, adc_.get_adc_value());
 		}
 		else {
+			motor_control_.close_damper();
 			mode_ = Mode::mode_stop;
 			direction_ = Direction::dir_none;
 			move_motor();

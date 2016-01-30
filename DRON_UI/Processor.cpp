@@ -16,7 +16,9 @@ Processor::Processor(QObject *parent) :
     settings_(new QSettings("StarCon", "DRON Control"))
 {
     measure_settings_.scan_com_ports();
+
     connect(&timer_, SIGNAL(timeout()), SLOT(dataUpdate()));
+
     measure_settings_.start_angle_ =
             settings_->value("measurement/start_angle", 0).toDouble();
     measure_settings_.stop_angle_ =
@@ -86,11 +88,13 @@ void Processor::processButtons(int button_number) {
 
         timer_.start(500);
         get_graph_curve()->clear();
+        QSound::play(".\\media\\meas_started.wav");
         break;
     case 3: // Stop button
         sendMessage(cmd_stop, 0);
         prepareFileFooter();
         data_file_.close();
+        QSound::play(".\\media\\meas_complete.wav");
         break;
     default:
         break;
@@ -117,9 +121,10 @@ void Processor::dataUpdate() {
                 showAlarm("Speed is too high");
             }
             else if (in_message.data.command == Commands::cmd_measurement_stopped) {
-                showAlarm("Measurement stopped");
                 prepareFileFooter();
                 data_file_.close();
+                QSound::play(".\\media\\meas_complete.wav");
+                showAlarm("Measurement stopped");
             }
             else if (measure_settings_.mode_ == Mode::mode_points || measure_settings_.mode_ == Mode::mode_integral){
                 get_graph_curve()->add_point(measure_settings_.start_angle_ + in_message.data.command / 200.,
