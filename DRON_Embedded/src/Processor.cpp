@@ -54,13 +54,13 @@ void Processor::interrupt_init() {
 void Processor::message_received(const std::pair<uint32_t, uint32_t>& message) {
 	switch (message.first) {
 	case Commands::cmd_start:
-		mode_ = message.second;
 		angle_counter_ = 0;
 		step_counter_ = 0;
 		move_motor();
+		mode_ = message.second;
 		break;
 	case Commands::cmd_stop:
-		mode_ = mode_stop;
+		mode_ = Mode::mode_stop;
 		direction_ = Direction::dir_none;
 		move_motor();
 		break;
@@ -128,13 +128,22 @@ void Processor::run() {
 		}
 		if (++angle_counter_ >= counts_) {
 			mode_ = Mode::mode_stop;
+			direction_ = Direction::dir_none;
+			move_motor();
+			get_communication()->send_data(Commands::cmd_measurement_stopped, 0);
 		}
 	}
 	else if (mode_ == Mode::mode_integral && !tick_processed()) {
-		get_communication()->send_data(angle_counter_, adc_.get_adc_value());
-		if (++angle_counter_ >= counts_) {
-			mode_ = Mode::mode_stop;
+		if (angle_counter_ < counts_) {
+			get_communication()->send_data(angle_counter_, adc_.get_adc_value());
 		}
+		else {
+			mode_ = Mode::mode_stop;
+			direction_ = Direction::dir_none;
+			move_motor();
+			get_communication()->send_data(Commands::cmd_measurement_stopped, 0);
+		}
+		++angle_counter_;
 	}
 	else if (mode_ == Mode::mode_justice) {
 		get_communication()->send_data(angle_counter_, adc_.get_adc_value());
@@ -146,7 +155,7 @@ void Processor::run() {
 extern "C" void EXTI1_IRQHandler(void)
 {
 	if(EXTI_GetITStatus(EXTI_Line1) != RESET) {
-		if (!get_processor()->tick_processed()) {
+		if (!get_processor()->tick_processed() && get_processor()->running()) {
 			get_communication()->send_data(Commands::cmd_alarm, Alarms::alarm_too_fast);
 		}
 		get_processor()->tick_event();

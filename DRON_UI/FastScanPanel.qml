@@ -17,7 +17,6 @@ Grid {
         text: processor.startAngle
         validator: DoubleValidator {}
         onTextChanged: {
-            //f_start_angle.focus = false
             processor.startAngle = f_start_angle.text
         }
     }
@@ -29,7 +28,6 @@ Grid {
         text: processor.stopAngle
         validator: DoubleValidator {}
         onTextChanged: {
-            //f_stop_angle.focus = false
             processor.stopAngle = f_stop_angle.text
         }
     }

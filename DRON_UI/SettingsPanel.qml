@@ -5,9 +5,6 @@ import QtQuick.Layouts 1.1
 
 import Qt.labs.settings 1.0
 
-import dron.FileManager 1.0
-
-
 GridLayout {
     id: settings_page
     anchors.centerIn: parent
@@ -42,14 +39,14 @@ GridLayout {
     Text {text: qsTr("Directory")}
     Text {
         id: file_dir_part
-        text: file_manager.directory
+        text: processor.directory
         Layout.columnSpan: 2
     }
 
     Text {text: qsTr("File")}
     TextField {
         id: file_file_part
-        text: file_manager.filename
+        text: processor.filename
     }
     Button {
         text: qsTr("Browse")
@@ -65,20 +62,18 @@ GridLayout {
         onCurrentTextChanged: processor.selectedPort = currentText
     }
 
-    FileManager {
-        id: file_manager
-    }
-
-
     Item {
         visible: false
         FileDialog {
             id: fileDialog
             title: "Please choose a file"
-            folder: shortcuts.home
+            //folder: shortcuts.desktop
+            folder: processor.directory
+            selectExisting: false
+            selectFolder: false
 
             onAccepted: {
-                file_manager.filename = fileDialog.fileUrl
+                processor.filename = fileDialog.fileUrl
             }
         }
     }

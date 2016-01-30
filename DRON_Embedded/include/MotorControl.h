@@ -19,14 +19,19 @@ public:
 	void stop();
 	void release();
 
+	void open_damper();
+	void close_damper();
+
 private:
 	GPIO_TypeDef* kForwardPort = GPIOA;
 	GPIO_TypeDef* kBackwardPort = GPIOA;
 	GPIO_TypeDef* kStopPort = GPIOB;
+	GPIO_TypeDef* kDamperPort = GPIOB;
 
 	uint16_t kForwardPin = GPIO_Pin_2;
 	uint16_t kBackwardPin = GPIO_Pin_3;
 	uint16_t kStopPin = GPIO_Pin_2;
+	uint16_t kDamperPin = GPIO_Pin_2;
 	void gpio_init();
 };
 

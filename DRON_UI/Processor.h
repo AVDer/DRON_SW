@@ -1,14 +1,17 @@
 #ifndef PROCESSOR_H
 #define PROCESSOR_H
 
+#include <fstream>
 #include <memory>
 #include <queue>
 
-#include <QObject>
+#include <QDebug>
 #include <QMessageBox>
+#include <QObject>
 #include <QSettings>
 #include <QTimer>
 
+#include "FileManager.h"
 #include "MeasureSettings.h"
 
 #include "Libs/qextserialport/qextserialport.h"
@@ -17,8 +20,8 @@
 class Processor : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(double startAngle READ startAngle WRITE setStartAngle NOTIFY startAngleChanged)
-    Q_PROPERTY(double stopAngle READ stopAngle WRITE setStopAngle NOTIFY stopAngleChanged)
+    Q_PROPERTY(QString startAngle READ startAngle WRITE setStartAngle NOTIFY startAngleChanged)
+    Q_PROPERTY(QString stopAngle READ stopAngle WRITE setStopAngle NOTIFY stopAngleChanged)
     Q_PROPERTY(double step READ step WRITE setStep NOTIFY stepChanged)
     Q_PROPERTY(double exposition READ exposition WRITE setExposition NOTIFY expositionChanged)
     Q_PROPERTY(double brakeTime READ brakeTime WRITE setBrakeTime NOTIFY brakeTimeChanged)
@@ -27,6 +30,9 @@ class Processor : public QObject
     Q_PROPERTY(QString selectedPort WRITE setSelectedPort)
     Q_PROPERTY(int mode WRITE setMode)
     Q_PROPERTY(QString adcValue READ adcValue NOTIFY adcValueChanged)
+
+    Q_PROPERTY(QString directory READ directory NOTIFY directoryChanged)
+    Q_PROPERTY(QString filename READ filename WRITE setFilename NOTIFY filenameChanged)
 
 public:
     explicit Processor(QObject *parent = 0);
@@ -45,21 +51,22 @@ public:
         measure_settings_.selected_port_ = measure_settings_.ports_map_[port];
     }
 
-    double startAngle() const {
-        return measure_settings_.start_angle_;
+    QString startAngle() const {
+        return QString::number(measure_settings_.start_angle_);
     }
 
-    void setStartAngle(double start_angle) {
-        measure_settings_.start_angle_ = start_angle;
+    void setStartAngle(QString start_angle) {
+        measure_settings_.start_angle_ = start_angle.toDouble();
         emit startAngleChanged();
     }
 
-    double stopAngle() const {
-        return measure_settings_.stop_angle_;
+    QString stopAngle() const {
+        return QString::number(measure_settings_.stop_angle_);
     }
 
-    void setStopAngle(double stop_angle) {
-        measure_settings_.stop_angle_ = stop_angle;
+    void setStopAngle(QString stop_angle) {
+        measure_settings_.stop_angle_ = stop_angle.toDouble();
+        qDebug() << stop_angle;
         emit stopAngleChanged();
     }
 
@@ -103,6 +110,16 @@ public:
         return adc_value_;
     }
 
+    void setFilename(QString filename);
+
+    QString directory() {
+        return file_manager_.directory_;
+    }
+
+    QString filename() {
+        return file_manager_.filename_;
+    }
+
 
 signals:
     void startAngleChanged();
@@ -112,6 +129,8 @@ signals:
     void brakeTimeChanged();
     void delayChanged();
     void adcValueChanged();
+    void directoryChanged();
+    void filenameChanged();
 
 public slots:
     void dataUpdate();
@@ -120,9 +139,13 @@ private:
     void sendSyncMessage();
     void sendMessage(uint32_t command, uint32_t data, bool queued = true);
     void showAlarm(QString message);
+    void prepareFileHeader();
+    void prepareFileFooter();
 
+    FileManager file_manager_;
     MeasureSettings measure_settings_;
     QextSerialPort com_port_;
+    std::ofstream data_file_;
     QTimer timer_;
     std::unique_ptr<QSettings> settings_;
     std::queue<Message> message_queue_;

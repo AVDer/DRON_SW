@@ -39,6 +39,14 @@ void MotorControl::release() {
 	GPIO_ResetBits(kBackwardPort, kBackwardPin);
 }
 
+void MotorControl::open_damper() {
+	GPIO_SetBits(kDamperPort, kDamperPin);
+}
+
+void MotorControl::close_damper() {
+	GPIO_ResetBits(kDamperPort, kDamperPin);
+}
+
 void MotorControl::gpio_init() {
 	GPIO_InitTypeDef io_init_struct;
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
@@ -47,7 +55,7 @@ void MotorControl::gpio_init() {
 	io_init_struct.GPIO_Speed = GPIO_Speed_50MHz;
 	io_init_struct.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_Init(kForwardPort, &io_init_struct);
-	io_init_struct.GPIO_Pin = kStopPin;
+	io_init_struct.GPIO_Pin = kStopPin | kDamperPin;
 	GPIO_Init(kStopPort, &io_init_struct);
 
 	release();
