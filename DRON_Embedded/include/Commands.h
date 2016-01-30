@@ -14,7 +14,8 @@
 const uint8_t kMessageSize = 8;
 
 enum Commands {
-	cmd_start = 0,
+	cmd_none = 0,
+	cmd_start,
 	cmd_stop,
 	cmd_counts,
 	cmd_step,
@@ -23,8 +24,10 @@ enum Commands {
 	cmd_break_time,
 	cmd_delay,
 	cmd_sync = 0xFF,
-	cmd_sw_version = 0xFFFFFFFD,
-	cmd_alarm = 0xFFFFFFFE,
+	cmd_embedded_commands = 0xFF000000,
+	cmd_measurement_stopped,
+	cmd_sw_version,
+	cmd_alarm,
 	cmd_sync_32 = 0xFFFFFFFF
 };
 

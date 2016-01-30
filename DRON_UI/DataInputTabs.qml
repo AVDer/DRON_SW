@@ -21,6 +21,13 @@ Item {
             }
         }
         Tab {
+            onVisibleChanged: { if (visible) processor.mode = 3 }
+            title: qsTr("Adjustment")
+            AdjustPanel {
+
+            }
+        }
+        Tab {
             title: qsTr("Settings")
             SettingsPanel {
 

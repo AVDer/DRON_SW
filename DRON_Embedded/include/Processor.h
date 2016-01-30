@@ -30,6 +30,8 @@ public:
 	void tick_event() {tick_event_ = true;}
 	bool tick_processed() { return !tick_event_; }
 private:
+	const uint32_t kADC_Delay = 500;
+
 	bool running() {return mode_ != mode_stop;}
 	void move_motor();
 	void gpio_init();

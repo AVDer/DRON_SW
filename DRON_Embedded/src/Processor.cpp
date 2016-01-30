@@ -61,6 +61,8 @@ void Processor::message_received(const std::pair<uint32_t, uint32_t>& message) {
 		break;
 	case Commands::cmd_stop:
 		mode_ = mode_stop;
+		direction_ = Direction::dir_none;
+		move_motor();
 		break;
 	case Commands::cmd_counts:
 		counts_ = message.second;
@@ -109,10 +111,10 @@ void Processor::move_motor() {
 }
 
 void Processor::run() {
-	if (!tick_event_ || !running()) {
+	if (!running()) {
 		return;
 	}
-	if (mode_ == mode_points) { // Point scan
+	if (mode_ == Mode::mode_points && !tick_processed()) { // Point scan
 		if (++step_counter_ >= step_) {
 			step_counter_ = 0;
 			motor_control_.stop();
@@ -124,12 +126,19 @@ void Processor::run() {
 			get_communication()->send_data(angle_counter_, pulse_counter_.get_counter());
 			move_motor();
 		}
+		if (++angle_counter_ >= counts_) {
+			mode_ = Mode::mode_stop;
+		}
 	}
-	else if (mode_ == mode_integral || mode_ == mode_justice) {
+	else if (mode_ == Mode::mode_integral && !tick_processed()) {
 		get_communication()->send_data(angle_counter_, adc_.get_adc_value());
+		if (++angle_counter_ >= counts_) {
+			mode_ = Mode::mode_stop;
+		}
 	}
-	if (++angle_counter_ >= counts_) {
-		mode_ = mode_stop;
+	else if (mode_ == Mode::mode_justice) {
+		get_communication()->send_data(angle_counter_, adc_.get_adc_value());
+		Delay::ms(kADC_Delay);
 	}
 	tick_event_ = false;
 }

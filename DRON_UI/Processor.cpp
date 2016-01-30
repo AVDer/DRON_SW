@@ -41,9 +41,12 @@ Processor::~Processor() {
 }
 
 void Processor::processButtons(int button_number) {
-
+    sendSyncMessage();
     switch (button_number) {
     case 1: // Start button
+        if (measure_settings_.selected_port_.isEmpty()) {
+            showAlarm("Please select serial port");
+        }
         com_port_.setBaudRate(BAUD115200);
         com_port_.setDataBits(DATA_8);
         com_port_.setFlowControl(FLOW_OFF);
@@ -51,16 +54,15 @@ void Processor::processButtons(int button_number) {
         com_port_.setPortName(measure_settings_.selected_port_);
         com_port_.open(QIODevice::ReadWrite);
 
+        sendMessage(cmd_counts,
+                    fabs(measure_settings_.start_angle_ - measure_settings_.stop_angle_) * 200.);
+        sendMessage(cmd_step, measure_settings_.step_ * 2);
         sendMessage(cmd_direction,
                     (measure_settings_.start_angle_ < measure_settings_.stop_angle_) ?
                         Direction::dir_forward : Direction::dir_backward);
-
-        sendMessage(cmd_counts,
-                    fabs(measure_settings_.start_angle_ - measure_settings_.stop_angle_) /
-                    measure_settings_.step_ * 100.);
-
         sendMessage(cmd_exposition, measure_settings_.exposition_ * 1000.);
-        sendMessage(cmd_step, measure_settings_.step_ * 2);
+        sendMessage(cmd_break_time, measure_settings_.brake_time_);
+        sendMessage(cmd_delay, measure_settings_.delay_ * 1000.);
         sendMessage(cmd_start, measure_settings_.mode_);
 
         timer_.start(500);
@@ -68,7 +70,9 @@ void Processor::processButtons(int button_number) {
         break;
     case 3: // Stop button
         sendMessage(cmd_stop, 0);
-        com_port_.close();
+        break;
+    default:
+        break;
     }
 }
 
@@ -88,24 +92,44 @@ void Processor::dataUpdate() {
         in_message.chars[read_index] = c;
         if (++read_index >= kMessageSize) {
             read_index = 0;
+
             if (in_message.data.command == Commands::cmd_alarm) {
-                QMessageBox::information(nullptr, "Alarm", "Too fast");
+                showAlarm("Speed is too high");
             }
-            else {
-                get_graph_curve()->add_point(measure_settings_.start_angle_ +
-                                             measure_settings_.step_ * in_message.data.command / 100.,
+            else if (in_message.data.command == Commands::cmd_measurement_stopped) {
+                showAlarm("Measurement stopped");
+            }
+            else if (measure_settings_.mode_ == Mode::mode_points || measure_settings_.mode_ == Mode::mode_integral){
+                get_graph_curve()->add_point(measure_settings_.start_angle_ + in_message.data.command / 200.,
                                              in_message.data.data);
+            }
+            else if (measure_settings_.mode_ == Mode::mode_justice) {
+                adc_value_ = QString::number(static_cast<double>(in_message.data.data) * 3300 / 4095) + " mV";
+                emit adcValueChanged();
             }
         }
     }
 }
 
-void Processor::sendMessage(uint32_t command, uint32_t data)
-{
+void Processor::sendMessage(uint32_t command, uint32_t data, bool queued) {
     Message out_message;
     out_message.data.command = command;
     out_message.data.data = data;
-    message_queue_.push(out_message);
+    if (queued) {
+        message_queue_.push(out_message);
+    }
+    else {
+        com_port_.write(out_message.chars, kMessageSize);
+    }
+}
+
+void Processor::sendSyncMessage() {
+    sendMessage(Commands::cmd_sync_32, Commands::cmd_sync_32);
+    sendMessage(Commands::cmd_sync_32, Commands::cmd_sync_32);
+}
+
+void Processor::showAlarm(QString message) {
+    QMessageBox::information(nullptr, "Alarm", message);
 }
 
 void Processor::lineStyleChanged(int style) {

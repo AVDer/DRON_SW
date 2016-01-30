@@ -26,6 +26,7 @@ class Processor : public QObject
     Q_PROPERTY(QStringList com_port_names READ com_port_names)
     Q_PROPERTY(QString selectedPort WRITE setSelectedPort)
     Q_PROPERTY(int mode WRITE setMode)
+    Q_PROPERTY(QString adcValue READ adcValue NOTIFY adcValueChanged)
 
 public:
     explicit Processor(QObject *parent = 0);
@@ -98,6 +99,10 @@ public:
         measure_settings_.mode_ = mode;
     }
 
+    QString adcValue() const {
+        return adc_value_;
+    }
+
 
 signals:
     void startAngleChanged();
@@ -106,18 +111,22 @@ signals:
     void expositionChanged();
     void brakeTimeChanged();
     void delayChanged();
+    void adcValueChanged();
 
 public slots:
     void dataUpdate();
 
 private:
-    void sendMessage(uint32_t command, uint32_t data);
+    void sendSyncMessage();
+    void sendMessage(uint32_t command, uint32_t data, bool queued = true);
+    void showAlarm(QString message);
 
     MeasureSettings measure_settings_;
     QextSerialPort com_port_;
     QTimer timer_;
     std::unique_ptr<QSettings> settings_;
     std::queue<Message> message_queue_;
+    QString adc_value_ = 0;
 };
 
 #endif // PROCESSOR_H

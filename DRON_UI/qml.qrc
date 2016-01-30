@@ -12,5 +12,6 @@
         <file>SettingsPanel.qml</file>
         <file>images/arrow.png</file>
         <file>LinePanel.qml</file>
+        <file>AdjustPanel.qml</file>
     </qresource>
 </RCC>
