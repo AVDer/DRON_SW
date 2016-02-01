@@ -7,6 +7,7 @@
 
 #include "Libs/qwt/include/qwt_plot.h"
 #include "Libs/qwt/include/qwt_plot_curve.h"
+#include "Libs/qwt/include/qwt_symbol.h"
 
 class QuickQwtPlot;
 class GraphCurve;
@@ -16,7 +17,7 @@ class GraphCurve
 {
 public:
     GraphCurve();
-    void set_plot(QuickQwtPlot* plot);
+    void set_plot(QwtPlot *plot);
     void add_point(double x, double y);
     void clear();
     void set_style(int style);
@@ -25,7 +26,7 @@ public:
 
 private:
     const QColor kGraphColor = Qt::red;
-    QuickQwtPlot* plot_;
+    QwtPlot* plot_;
     QwtPlotCurve* curve_;
     std::vector<double> data_x;
     std::vector<double> data_y;

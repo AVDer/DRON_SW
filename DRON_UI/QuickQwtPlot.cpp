@@ -32,7 +32,7 @@ QuickQwtPlot::QuickQwtPlot(QQuickItem *parent)  : QQuickPaintedItem(parent)
     grid_->attach(mPlot);
     /*magnifier_ = new QwtPlotMagnifier(mPlot->canvas());
     panner_ = new QwtPlotPanner(mPlot->canvas());*/
-    get_graph_curve()->set_plot(this);
+    //get_graph_curve()->set_plot(this);
 }
 
 QuickQwtPlot::~QuickQwtPlot()

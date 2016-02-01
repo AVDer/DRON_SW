@@ -1,7 +1,5 @@
 #include "GraphCurve.h"
 
-#include "QuickQwtPlot.h"
-
 GraphCurve* get_graph_curve() {
     static GraphCurve graph_curve_;
     return &graph_curve_;
@@ -11,9 +9,9 @@ GraphCurve::GraphCurve() {
     curve_ = new QwtPlotCurve();
 }
 
-void GraphCurve::set_plot(QuickQwtPlot *plot) {
+void GraphCurve::set_plot(QwtPlot *plot) {
     plot_ = plot;
-    curve_->attach(plot->getPlot());
+    curve_->attach(plot);
     set_style(style_);
 }
 

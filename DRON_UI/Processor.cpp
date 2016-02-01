@@ -12,52 +12,22 @@
 #include "MeasureSettings.h"
 
 Processor::Processor(QObject *parent) :
-    QObject(parent),
-    settings_(new QSettings("StarCon", "DRON Control"))
+    QObject(parent)
 {
     measure_settings_.scan_com_ports();
 
     connect(&timer_, SIGNAL(timeout()), SLOT(dataUpdate()));
-
-    measure_settings_.start_angle_ =
-            settings_->value("measurement/start_angle", 0).toDouble();
-    measure_settings_.stop_angle_ =
-            settings_->value("measurement/stop_angle", 90).toDouble();
-    measure_settings_.step_ =
-            settings_->value("measurement/step", 1).toDouble();
-    measure_settings_.exposition_ =
-            settings_->value("measurement/exposition", 2).toDouble();
-    measure_settings_.brake_time_ =
-            settings_->value("measurement/brake_time", 1).toDouble();
-    measure_settings_.delay_ =
-            settings_->value("measurement/delay", 1).toDouble();
-    setFilename(settings_->value("data/filename").toString());
 }
 
 Processor::~Processor() {
     com_port_.close();
     data_file_.close();
-    settings_->setValue("measurement/start_angle", measure_settings_.start_angle_);
-    settings_->setValue("measurement/stop_angle", measure_settings_.stop_angle_);
-    settings_->setValue("measurement/step", measure_settings_.step_);
-    settings_->setValue("measurement/exposition", measure_settings_.exposition_);
-    settings_->setValue("settings/brake_time", measure_settings_.brake_time_);
-    settings_->setValue("settings/delay", measure_settings_.delay_);
-    settings_->setValue("data/filename", file_manager_.full_filename_);
 }
 
-void Processor::processButtons(int button_number) {
+void Processor::processButtons(ButtonID button_number) {
     sendSyncMessage();
     switch (button_number) {
-    case 1: // Start button
-        if (measure_settings_.selected_port_.isEmpty()) {
-            showAlarm("Please select serial port");
-            return;
-        }
-        if (file_manager_.full_filename_.isEmpty()) {
-            showAlarm("Please select filename");
-            return;
-        }
+    case ButtonID::Start:
         com_port_.setBaudRate(BAUD115200);
         com_port_.setDataBits(DATA_8);
         com_port_.setFlowControl(FLOW_OFF);
@@ -90,7 +60,7 @@ void Processor::processButtons(int button_number) {
         get_graph_curve()->clear();
         QSound::play(".\\media\\meas_started.wav");
         break;
-    case 3: // Stop button
+    case ButtonID::Stop: // Stop button
         sendMessage(cmd_stop, 0);
         prepareFileFooter();
         data_file_.close();
@@ -133,7 +103,7 @@ void Processor::dataUpdate() {
             }
             else if (measure_settings_.mode_ == Mode::mode_justice) {
                 adc_value_ = QString::number(static_cast<double>(in_message.data.data) * 3300 / 4095) + " mV";
-                emit adcValueChanged();
+                emit adcValueChanged(adc_value_);
             }
         }
     }
@@ -197,7 +167,7 @@ void Processor::setFilename(QString filename) {
         file_manager_.directory_ = file_manager_.full_filename_.left(separator_pos);
         file_manager_.filename_ = file_manager_.full_filename_.right(file_manager_.full_filename_.size() - separator_pos - 1);
 
-        emit filenameChanged();
-        emit directoryChanged();
+        emit filenameChanged(file_manager_.filename_);
+        emit directoryChanged(file_manager_.directory_);
     }
 }

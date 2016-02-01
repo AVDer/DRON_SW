@@ -11,7 +11,9 @@ SOURCES += main.cpp \
     MeasureSettings.cpp \
     Processor.cpp \
     Communication.cpp \
-    GraphCurve.cpp
+    GraphCurve.cpp \
+    SimpleButton.cpp \
+    LimitsInput.cpp
 
 RESOURCES += qml.qrc
 
@@ -29,7 +31,9 @@ HEADERS += \
     MeasureSettings.h \
     Processor.h \
     Communication.h \
-    GraphCurve.h
+    GraphCurve.h \
+    SimpleButton.h \
+    LimitsInput.h
 
 INCLUDEPATH += $$PWD/Libs/qwt/include
 
