@@ -1,11 +1,11 @@
 TEMPLATE = app
 
-QT += qml quick widgets multimedia
+QT += core gui widgets multimedia
+QT -= qml quick opengl webkit
 CONFIG += c++11 qwt
+CONFIG += static staticlib
 
 SOURCES += main.cpp \
-    QuickQwtPlot.cpp \
-    QuickCurve.cpp \
     MainWindow.cpp \
     FileManager.cpp \
     MeasureSettings.cpp \
@@ -15,7 +15,7 @@ SOURCES += main.cpp \
     SimpleButton.cpp \
     LimitsInput.cpp
 
-RESOURCES += qml.qrc
+RESOURCES +=
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -24,8 +24,6 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
-    QuickQwtPlot.h \
-    QuickCurve.h \
     MainWindow.h \
     FileManager.h \
     MeasureSettings.h \
