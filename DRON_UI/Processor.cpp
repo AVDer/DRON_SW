@@ -20,7 +20,7 @@ Processor::Processor(QObject *parent) :
 }
 
 Processor::~Processor() {
-    com_port_.close();
+    //com_port_.close();
     data_file_.close();
 }
 
@@ -28,18 +28,20 @@ void Processor::processButtons(ButtonID button_number) {
     sendSyncMessage();
     switch (button_number) {
     case ButtonID::Start:
+        /*
         com_port_.setBaudRate(BAUD115200);
         com_port_.setDataBits(DATA_8);
         com_port_.setFlowControl(FLOW_OFF);
         com_port_.setParity(PAR_NONE);
         com_port_.setPortName(measure_settings_.selected_port_);
         com_port_.open(QIODevice::ReadWrite);
+        */
 
         if (measure_settings_.mode_ == Mode::mode_points || measure_settings_.mode_ == Mode::mode_integral) {
             data_file_.open(file_manager_.full_filename_.toStdString());
             if (!data_file_.is_open()) {
                 showAlarm("File open error");
-                com_port_.close();
+                //com_port_.close();
                 return;
             }
             prepareFileHeader();
@@ -58,13 +60,11 @@ void Processor::processButtons(ButtonID button_number) {
 
         timer_.start(500);
         get_graph_curve()->clear();
-        QSound::play(".\\media\\meas_started.wav");
         break;
     case ButtonID::Stop: // Stop button
         sendMessage(cmd_stop, 0);
         prepareFileFooter();
         data_file_.close();
-        QSound::play(".\\media\\meas_complete.wav");
         break;
     default:
         break;
@@ -72,6 +72,7 @@ void Processor::processButtons(ButtonID button_number) {
 }
 
 void Processor::dataUpdate() {
+    /*
     int read_index = 0;
     char c;
     Message in_message;
@@ -93,7 +94,6 @@ void Processor::dataUpdate() {
             else if (in_message.data.command == Commands::cmd_measurement_stopped) {
                 prepareFileFooter();
                 data_file_.close();
-                QSound::play(".\\media\\meas_complete.wav");
                 showAlarm("Measurement stopped");
             }
             else if (measure_settings_.mode_ == Mode::mode_points || measure_settings_.mode_ == Mode::mode_integral){
@@ -107,6 +107,7 @@ void Processor::dataUpdate() {
             }
         }
     }
+    */
 }
 
 void Processor::sendMessage(uint32_t command, uint32_t data, bool queued) {
@@ -117,7 +118,7 @@ void Processor::sendMessage(uint32_t command, uint32_t data, bool queued) {
         message_queue_.push(out_message);
     }
     else {
-        com_port_.write(out_message.chars, kMessageSize);
+        //com_port_.write(out_message.chars, kMessageSize);
     }
 }
 

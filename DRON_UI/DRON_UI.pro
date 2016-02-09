@@ -1,9 +1,8 @@
-TEMPLATE = app
-
-QT += core gui widgets multimedia
+QT += core gui widgets
 QT -= qml quick opengl webkit
-CONFIG += c++11 qwt
-CONFIG += static staticlib
+QMAKE_CXXFLAGS += -std=c++11
+
+TEMPLATE = app
 
 SOURCES += main.cpp \
     MainWindow.cpp \
@@ -16,12 +15,6 @@ SOURCES += main.cpp \
     LimitsInput.cpp
 
 RESOURCES +=
-
-# Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH =
-
-# Default rules for deployment.
-include(deployment.pri)
 
 HEADERS += \
     MainWindow.h \
@@ -38,13 +31,10 @@ INCLUDEPATH += $$PWD/Libs/qwt/include
 LIBS += -L$$PWD/Libs/qwt/lib/
 
 unix {
-LIBS += -lqwt
+LIBS += -lqwt5
 }
 win32 {
-LIBS += -lqwt
+LIBS += -lqwt5
 }
 
 DISTFILES +=
-
-include($$PWD/Libs/qextserialport/qextserialport.pri)
-

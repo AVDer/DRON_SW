@@ -14,8 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     restore_settings();
 
     setCentralWidget(main_splitter_);
-    setWindowTitle(tr("DRON User Interface 2.0"));
-    showMaximized();
+    setWindowTitle(tr("DRON User Interface 2.2.0"));
 }
 
 MainWindow::~MainWindow() {

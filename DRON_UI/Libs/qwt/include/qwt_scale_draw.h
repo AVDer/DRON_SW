@@ -2,7 +2,7 @@
  * Qwt Widget Library
  * Copyright (C) 1997   Josef Wilgen
  * Copyright (C) 2002   Uwe Rathmann
- *
+ * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the Qwt License, Version 1.0
  *****************************************************************************/
@@ -10,11 +10,9 @@
 #ifndef QWT_SCALE_DRAW_H
 #define QWT_SCALE_DRAW_H
 
+#include <qpoint.h>
 #include "qwt_global.h"
 #include "qwt_abstract_scale_draw.h"
-#include <qpoint.h>
-#include <qrect.h>
-#include <qtransform.h>
 
 /*!
   \brief A class for drawing scales
@@ -28,93 +26,88 @@
   using QwtAbstractScaleDraw::setScaleDiv(const QwtScaleDiv &s),
   the scale can be drawn with the QwtAbstractScaleDraw::draw() member.
 */
+
 class QWT_EXPORT QwtScaleDraw: public QwtAbstractScaleDraw
 {
 public:
-    /*!
+    /*! 
         Alignment of the scale draw
         \sa setAlignment(), alignment()
      */
-    enum Alignment 
-    { 
-        //! The scale is below
-        BottomScale, 
-
-        //! The scale is above
-        TopScale, 
-
-        //! The scale is left
-        LeftScale, 
-
-        //! The scale is right
-        RightScale 
-    };
+    enum Alignment { BottomScale, TopScale, LeftScale, RightScale };
 
     QwtScaleDraw();
+    QwtScaleDraw(const QwtScaleDraw &);
+
     virtual ~QwtScaleDraw();
 
-    void getBorderDistHint( const QFont &, int &start, int &end ) const;
-    int minLabelDist( const QFont & ) const;
+    QwtScaleDraw &operator=(const QwtScaleDraw &other);
 
-    int minLength( const QFont & ) const;
-    virtual double extent( const QFont & ) const;
+    void getBorderDistHint(const QFont &, int &start, int &end) const;
+    int minLabelDist(const QFont &) const;
 
-    void move( double x, double y );
-    void move( const QPointF & );
-    void setLength( double length );
+    int minLength(const QPen &, const QFont &) const;
+    virtual int extent(const QPen &, const QFont &) const;
+
+    void move(int x, int y);
+    void move(const QPoint &);
+    void setLength(int length);
 
     Alignment alignment() const;
-    void setAlignment( Alignment );
+    void setAlignment(Alignment);
 
     Qt::Orientation orientation() const;
 
-    QPointF pos() const;
-    double length() const;
+    QPoint pos() const;
+    int length() const;
 
-    void setLabelAlignment( Qt::Alignment );
+#if QT_VERSION < 0x040000
+    void setLabelAlignment(int);
+    int labelAlignment() const;
+#else
+    void setLabelAlignment(Qt::Alignment);
     Qt::Alignment labelAlignment() const;
+#endif
 
-    void setLabelRotation( double rotation );
+    void setLabelRotation(double rotation);
     double labelRotation() const;
 
-    int maxLabelHeight( const QFont & ) const;
-    int maxLabelWidth( const QFont & ) const;
+    int maxLabelHeight(const QFont &) const;
+    int maxLabelWidth(const QFont &) const;
 
-    QPointF labelPosition( double val ) const;
+    QPoint labelPosition(double val) const;
 
-    QRectF labelRect( const QFont &, double val ) const;
-    QSizeF labelSize( const QFont &, double val ) const;
+    QRect labelRect(const QFont &, double val) const;
+    QSize labelSize(const QFont &, double val) const;
 
-    QRect boundingLabelRect( const QFont &, double val ) const;
+    QRect boundingLabelRect(const QFont &, double val) const;
 
 protected:
-    QTransform labelTransformation( const QPointF &, const QSizeF & ) const;
 
-    virtual void drawTick( QPainter *, double val, double len ) const;
-    virtual void drawBackbone( QPainter * ) const;
-    virtual void drawLabel( QPainter *, double val ) const;
+#if QT_VERSION < 0x040000
+    QWMatrix labelMatrix(const QPoint &, const QSize &) const;
+#else   
+    QMatrix labelMatrix(const QPoint &, const QSize &) const;
+#endif  
+
+    virtual void drawTick(QPainter *p, double val, int len) const;
+    virtual void drawBackbone(QPainter *p) const;
+    virtual void drawLabel(QPainter *p, double val) const;
 
 private:
-    QwtScaleDraw( const QwtScaleDraw & );
-    QwtScaleDraw &operator=( const QwtScaleDraw &other );
-
     void updateMap();
 
     class PrivateData;
     PrivateData *d_data;
 };
 
-/*!
+/*! 
    Move the position of the scale
-
-   \param x X coordinate
-   \param y Y coordinate
-
-   \sa move(const QPointF &)
+   \sa move(const QPoint &)
 */
-inline void QwtScaleDraw::move( double x, double y )
+inline void QwtScaleDraw::move(int x, int y)
 {
-    move( QPointF( x, y ) );
+    move(QPoint(x, y));
 }
 
 #endif

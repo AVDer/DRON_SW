@@ -18,14 +18,14 @@ void GraphCurve::set_plot(QwtPlot *plot) {
 void GraphCurve::add_point(double x, double y) {
     data_x.push_back(x);
     data_y.push_back(y);
-    curve_->setSamples(data_x.data(), data_y.data(), data_x.size());
+    curve_->setData(data_x.data(), data_y.data(), data_x.size());
     plot_->update();
 }
 
 void GraphCurve::clear() {
     data_x.clear();
     data_y.clear();
-    curve_->setSamples(data_x.data(), data_y.data(), data_x.size());
+    curve_->setData(data_x.data(), data_y.data(), data_x.size());
     plot_->update();
 }
 
@@ -37,7 +37,7 @@ void GraphCurve::set_style(int style) {
     }
     else {
         curve_->setStyle(QwtPlotCurve::Dots);
-        curve_->setSymbol(new QwtSymbol(QwtSymbol::Ellipse, QBrush(kGraphColor), QPen(kGraphColor), QSize(size_, size_)));
+        curve_->setSymbol(QwtSymbol(QwtSymbol::Ellipse, QBrush(kGraphColor), QPen(kGraphColor), QSize(size_, size_)));
     }
     plot_->update();
 }

@@ -7,16 +7,23 @@
  * modify it under the terms of the Qwt License, Version 1.0
  *****************************************************************************/
 
-#ifndef QWT_H
-#define QWT_H
+// vim: expandtab
+
+#ifndef QWT_ARRAY_H
+#define QWT_ARRAY_H
 
 #include "qwt_global.h"
 
 /*!
-  Some constants for use within Qwt.
-*/
-namespace Qwt 
-{
-};
+  \def QwtArray
+ */
+
+#if QT_VERSION < 0x040000
+#include <qmemarray.h>
+#define QwtArray QMemArray
+#else
+#include <qvector.h>
+#define QwtArray QVector
+#endif
 
 #endif

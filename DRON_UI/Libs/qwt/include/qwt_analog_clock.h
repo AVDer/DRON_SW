@@ -10,10 +10,10 @@
 #ifndef QWT_ANALOG_CLOCK_H
 #define QWT_ANALOG_CLOCK_H
 
+#include <qdatetime.h>
 #include "qwt_global.h"
 #include "qwt_dial.h"
 #include "qwt_dial_needle.h"
-#include <qdatetime.h>
 
 /*!
   \brief An analog clock
@@ -21,8 +21,7 @@
   \image html analogclock.png
 
   \par Example
-  \code 
-  #include <qwt_analog_clock.h>
+  \verbatim #include <qwt_analog_clock.h>
 
   QwtAnalogClock *clock = new QwtAnalogClock(...);
   clock->scaleDraw()->setPenWidth(3);
@@ -35,7 +34,10 @@
   timer->connect(timer, SIGNAL(timeout()), clock, SLOT(setCurrentTime()));
   timer->start(1000);
 
-  \endcode
+  \endverbatim
+
+  Qwt is missing a set of good looking hands.
+  Contributions are very welcome.
 
   \note The examples/dials example shows how to use QwtAnalogClock.
 */
@@ -45,47 +47,46 @@ class QWT_EXPORT QwtAnalogClock: public QwtDial
     Q_OBJECT
 
 public:
-    /*!
+    /*! 
         Hand type
         \sa setHand(), hand()
     */
+
     enum Hand
     {
-        //! Needle displaying the seconds
         SecondHand,
-
-        //! Needle displaying the minutes
         MinuteHand,
-
-        //! Needle displaying the hours
         HourHand,
 
-        //! Number of needles
         NHands
     };
 
-    explicit QwtAnalogClock( QWidget* parent = NULL );
+    explicit QwtAnalogClock(QWidget* parent = NULL);
+#if QT_VERSION < 0x040000
+    explicit QwtAnalogClock(QWidget* parent, const char *name);
+#endif
     virtual ~QwtAnalogClock();
 
-    void setHand( Hand, QwtDialNeedle * );
+    virtual void setHand(Hand, QwtDialNeedle *);
+    const QwtDialNeedle *hand(Hand) const;
+    QwtDialNeedle *hand(Hand);
 
-    const QwtDialNeedle *hand( Hand ) const;
-    QwtDialNeedle *hand( Hand );
-
-public Q_SLOTS:
+public slots:
     void setCurrentTime();
-    void setTime( const QTime & );
+    void setTime(const QTime & = QTime::currentTime());
 
 protected:
-    virtual void drawNeedle( QPainter *, const QPointF &,
-        double radius, double direction, QPalette::ColorGroup ) const;
+    virtual QwtText scaleLabel(double) const;
 
-    virtual void drawHand( QPainter *, Hand, const QPointF &,
-        double radius, double direction, QPalette::ColorGroup ) const;
+    virtual void drawNeedle(QPainter *, const QPoint &,
+        int radius, double direction, QPalette::ColorGroup) const;
+
+    virtual void drawHand(QPainter *, Hand, const QPoint &,
+        int radius, double direction, QPalette::ColorGroup) const;
 
 private:
-    // use setHand instead
-    void setNeedle( QwtDialNeedle * );
+    virtual void setNeedle(QwtDialNeedle *);
+    void initClock();
 
     QwtDialNeedle *d_hand[NHands];
 };

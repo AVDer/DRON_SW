@@ -7,22 +7,51 @@
  * modify it under the terms of the Qwt License, Version 1.0
  *****************************************************************************/
 
+// vim: expandtab
+
 #ifndef QWT_RASTER_DATA_H
 #define QWT_RASTER_DATA_H 1
 
-#include "qwt_global.h"
-#include "qwt_interval.h"
 #include <qmap.h>
+#include "qwt_global.h"
+#include "qwt_double_rect.h"
+#include "qwt_double_interval.h"
+
+#if QT_VERSION >= 0x040000
 #include <qlist.h>
-#include <qpolygon.h>
+#include <QPolygonF>
+
+#if defined(QWT_TEMPLATEDLL)
+// MOC_SKIP_BEGIN
+template class QWT_EXPORT QMap<double, QPolygonF>;
+// MOC_SKIP_END
+#endif
+
+#else
+#include <qvaluelist.h>
+#include "qwt_array.h"
+#include "qwt_double_rect.h"
+#if defined(QWT_TEMPLATEDLL)
+// MOC_SKIP_BEGIN
+#ifndef QWTARRAY_TEMPLATE_QWTDOUBLEPOINT // by mjo3
+#define QWTARRAY_TEMPLATE_QWTDOUBLEPOINT
+template class QWT_EXPORT QwtArray<QwtDoublePoint>;
+#endif //end of QWTARRAY_TEMPLATE_QWTDOUBLEPOINT
+#ifndef QMAP_TEMPLATE_DOUBLE_QWTDOUBLEPOINT // by mjo3
+#define QMAP_TEMPLATE_DOUBLE_QWTDOUBLEPOINT
+template class QWT_EXPORT QMap<double, QwtArray<QwtDoublePoint> >;
+#endif //end of QMAP_TEMPLATE_QWTDOUBLEPOINT
+// MOC_SKIP_END
+#endif
+#endif
 
 class QwtScaleMap;
 
 /*!
   \brief QwtRasterData defines an interface to any type of raster data.
 
-  QwtRasterData is an abstract interface, that is used by
-  QwtPlotRasterItem to find the values at the pixels of its raster.
+  QwtRasterData is an abstract interface, that is used by 
+  QwtPlotRasterItem to find the values at the pixels of its raster. 
 
   Often a raster item is used to display values from a matrix. Then the
   derived raster data class needs to implement some sort of resampling,
@@ -32,64 +61,59 @@ class QwtScaleMap;
 class QWT_EXPORT QwtRasterData
 {
 public:
-    //! Contour lines
+#if QT_VERSION >= 0x040000
     typedef QMap<double, QPolygonF> ContourLines;
+#else
+    typedef QMap<double, QwtArray<QwtDoublePoint> > ContourLines;
+#endif
 
-    //! Flags to modify the contour algorithm
-    enum ConrecFlag
+    //! Attribute to modify the contour algorithm 
+    enum ConrecAttribute
     {
-        //! Ignore all vertices on the same level
-        IgnoreAllVerticesOnLevel = 0x01,
-
-        //! Ignore all values, that are out of range
-        IgnoreOutOfRange = 0x02
+        IgnoreAllVerticesOnLevel = 1,
+        IgnoreOutOfRange = 2
     };
 
-    //! Flags to modify the contour algorithm
-    typedef QFlags<ConrecFlag> ConrecFlags;
-
     QwtRasterData();
+    QwtRasterData(const QwtDoubleRect &);
     virtual ~QwtRasterData();
 
-    virtual void setInterval( Qt::Axis, const QwtInterval & );
-    const QwtInterval &interval(Qt::Axis) const;
+    //! Clone the data
+    virtual QwtRasterData *copy() const = 0;
 
-    virtual QRectF pixelHint( const QRectF & ) const;
+    virtual void setBoundingRect(const QwtDoubleRect &);
+    QwtDoubleRect boundingRect() const;
 
-    virtual void initRaster( const QRectF &, const QSize& raster );
+    virtual QSize rasterHint(const QwtDoubleRect &) const;
+
+    virtual void initRaster(const QwtDoubleRect &, const QSize& raster);
     virtual void discardRaster();
 
-    /*!
+    /*! 
        \return the value at a raster position
        \param x X value in plot coordinates
        \param y Y value in plot coordinates
     */
-    virtual double value( double x, double y ) const = 0;
+    virtual double value(double x, double y) const = 0;
 
-    virtual ContourLines contourLines( const QRectF &rect,
-        const QSize &raster, const QList<double> &levels,
-        ConrecFlags ) const;
+    //! \return the range of the values
+    virtual QwtDoubleInterval range() const = 0;
+
+#if QT_VERSION >= 0x040000
+    virtual ContourLines contourLines(const QwtDoubleRect &rect,
+        const QSize &raster, const QList<double> &levels, 
+        int flags) const;
+#else
+    virtual ContourLines contourLines(const QwtDoubleRect &rect,
+        const QSize &raster, const QValueList<double> &levels, 
+        int flags) const;
+#endif
 
     class Contour3DPoint;
     class ContourPlane;
 
 private:
-    // Disabled copy constructor and operator=
-    QwtRasterData( const QwtRasterData & );
-    QwtRasterData &operator=( const QwtRasterData & );
-
-    QwtInterval d_intervals[3];
+    QwtDoubleRect d_boundingRect;
 };
-
-/*!
-   \return Bounding interval for a axis
-   \sa setInterval
-*/
-inline const QwtInterval &QwtRasterData::interval( Qt::Axis axis) const
-{
-    return d_intervals[axis];
-}
-
-Q_DECLARE_OPERATORS_FOR_FLAGS( QwtRasterData::ConrecFlags )
 
 #endif

@@ -5,17 +5,15 @@
 #include <queue>
 
 #include <QDebug>
-#include <QtMultimedia/QMediaPlayer>
 #include <QObject>
 #include <QSettings>
-#include <QSound>
 #include <QTimer>
 
 #include "FileManager.h"
 #include "MeasureSettings.h"
 #include "SimpleButton.h"
 
-#include "Libs/qextserialport/qextserialport.h"
+//#include "Libs/qextserialport/qextserialport.h"
 #include "../DRON_Embedded/include/Commands.h"
 
 class Processor : public QObject
@@ -95,12 +93,11 @@ private:
     void prepareFileHeader();
     void prepareFileFooter();
 
-    QMediaPlayer media_player_;
     QTimer timer_;
     FileManager file_manager_;
     MeasureSettings measure_settings_;
 
-    QextSerialPort com_port_;
+    //QextSerialPort com_port_;
     std::ofstream data_file_;
     std::queue<Message> message_queue_;
     QString adc_value_ = 0;
