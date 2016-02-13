@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     restore_settings();
 
     setCentralWidget(main_splitter_);
-    setWindowTitle(tr("DRON User Interface 2.2.0"));
+    setWindowTitle(tr("DRON User Interface 2.3.0"));
 }
 
 MainWindow::~MainWindow() {
@@ -31,6 +31,8 @@ void MainWindow::create_widgets() {
     start_button_ = new SimpleButton(tr("Start"), Start);
     pause_button_ = new SimpleButton(tr("Pause"), Pause);
     stop_button_ = new SimpleButton(tr("Stop"), Stop);
+    damper_open_button_ = new SimpleButton(tr("Open damper"), Open_Damper);
+    damper_close_button_ = new SimpleButton(tr("Close damper"), Close_Damper);
 
     point_scan_ = new QRadioButton(tr("Point scan"), this);
     integral_scan_ = new QRadioButton(tr("Integral scan"), this);
@@ -84,6 +86,7 @@ void MainWindow::create_layouts()
     settings_v_layout_ = new QVBoxLayout;
     line_layout_ = new QGridLayout;
     line_v_layout_ = new QVBoxLayout;
+    damper_layout_ = new QHBoxLayout;
 
     button_layout_->addStretch(-1);
     button_layout_->addWidget(start_button_);
@@ -112,13 +115,13 @@ void MainWindow::create_layouts()
 
     angle_layout_->addWidget(new QLabel(tr("Start angle:")), 0, 0);
     angle_layout_->addWidget(start_angle_, 0, 1);
-    angle_layout_->addWidget(new QLabel(tr("Â°")), 0, 2);
+    angle_layout_->addWidget(new QLabel(tr(" °")), 0, 2);
     angle_layout_->addWidget(new QLabel(tr("Stop angle:")), 1, 0);
     angle_layout_->addWidget(stop_angle_, 1, 1);
-    angle_layout_->addWidget(new QLabel(tr("Â°")), 1, 2);
+    angle_layout_->addWidget(new QLabel(tr(" °")), 1, 2);
     angle_layout_->addWidget(new QLabel(tr("Step:")), 2, 0);
     angle_layout_->addWidget(step_, 2, 1);
-    angle_layout_->addWidget(new QLabel(tr("x 0.01Â°")), 2, 2);
+    angle_layout_->addWidget(new QLabel(tr("x 0.01 °")), 2, 2);
     angle_layout_->addWidget(new QLabel(tr("Exposition:")), 3, 0);
     angle_layout_->addWidget(exposition_, 3, 1);
     angle_layout_->addWidget(new QLabel(tr("s")), 3, 2);
@@ -143,6 +146,10 @@ void MainWindow::create_layouts()
     settings_layout_->addWidget(com_port_box_, 4, 1, 1, 2);
     settings_v_layout_->addLayout(settings_layout_);
     settings_v_layout_->addStretch(-1);
+    damper_layout_->addWidget(damper_open_button_);
+    damper_layout_->addStretch(-1);
+    damper_layout_->addWidget(damper_close_button_);
+    settings_v_layout_->addLayout(damper_layout_);
     settings_widget_->setLayout(settings_v_layout_);
 
     line_layout_->addWidget(line_style_, 0, 0, 1, 3);
@@ -181,6 +188,9 @@ void MainWindow::create_connections()
     connect(line_style_, SIGNAL(pressed()), SLOT(line_style_changed()));
     connect(point_style_, SIGNAL(pressed()), SLOT(line_style_changed()));
     connect(line_width_, SIGNAL(valueChanged(int)), processor_, SLOT(lineSizeChanged(int)));
+
+    connect(damper_open_button_, SIGNAL(button_pressed(ButtonID)), SLOT(open_damper_pressed()));
+    connect(damper_close_button_, SIGNAL(button_pressed(ButtonID)), SLOT(close_damper_pressed()));
 }
 
 void MainWindow::adjust_widgets()
@@ -279,6 +289,14 @@ void MainWindow::stop_button_pressed() {
     processor_->processButtons(Stop);
     start_button_->setEnabled(true);
     stop_button_->setEnabled(false);
+}
+
+void MainWindow::open_damper_pressed() {
+    processor_->processButtons(Open_Damper);
+}
+
+void MainWindow::close_damper_pressed() {
+    processor_->processButtons(Close_Damper);
 }
 
 void MainWindow::file_browse() {

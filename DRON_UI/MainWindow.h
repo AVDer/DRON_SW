@@ -56,6 +56,8 @@ private:
     SimpleButton *start_button_;
     SimpleButton *pause_button_;
     SimpleButton *stop_button_;
+    SimpleButton *damper_open_button_;
+    SimpleButton *damper_close_button_;
 
     QRadioButton *point_scan_;
     QRadioButton *integral_scan_;
@@ -102,6 +104,7 @@ private:
     QVBoxLayout *line_v_layout_;
     QVBoxLayout *mode_layout_;
     QVBoxLayout *meas_layout_;
+    QHBoxLayout *damper_layout_;
 
     Processor *processor_;
 
@@ -112,6 +115,8 @@ signals:
 public slots:
     void start_button_pressed();
     void stop_button_pressed();
+    void open_damper_pressed();
+    void close_damper_pressed();
     void file_browse();
     void x_axis_change();
     void y_axis_change();

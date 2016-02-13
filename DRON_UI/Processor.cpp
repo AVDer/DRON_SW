@@ -9,7 +9,7 @@
 #include "MeasureSettings.h"
 
 Processor::Processor(QObject *parent) :
-    QObject(parent)
+        QObject(parent)
 {
     measure_settings_.scan_com_ports();
 
@@ -47,10 +47,10 @@ void Processor::processButtons(ButtonID button_number) {
         sendMessage(cmd_step, measure_settings_.step_ * 2);
         sendMessage(cmd_direction,
                     (measure_settings_.start_angle_ < measure_settings_.stop_angle_) ?
-                        dir_forward : dir_backward);
+                    dir_forward : dir_backward);
         sendMessage(cmd_exposition, measure_settings_.exposition_ * 1000.);
-        sendMessage(cmd_break_time, measure_settings_.brake_time_ * 1000.);
-        sendMessage(cmd_delay, measure_settings_.delay_ * 1000.);
+        sendMessage(cmd_break_time, measure_settings_.brake_time_);
+        sendMessage(cmd_delay, measure_settings_.delay_);
         sendMessage(cmd_start, measure_settings_.mode_);
 
         timer_.start(500);
@@ -91,9 +91,12 @@ void Processor::dataUpdate() {
                 showAlarm("Measurement stopped");
             }
             else if (measure_settings_.mode_ == mode_points || measure_settings_.mode_ == mode_integral){
-                get_graph_curve()->add_point(measure_settings_.start_angle_ + in_message.data.command / 200.,
-                                             in_message.data.data);
-                data_file_ << measure_settings_.start_angle_ + in_message.data.command / 200. << '\t' << in_message.data.data << std::endl;
+                double received_angle = measure_settings_.start_angle_ + in_message.data.command / 200.;
+                if (received_angle >= measure_settings_.start_angle_ &&
+                    received_angle <= measure_settings_.stop_angle_) {
+                    get_graph_curve()->add_point(received_angle, in_message.data.data);
+                    data_file_ << received_angle << '\t' << in_message.data.data << std::endl;
+                }
             }
             else if (measure_settings_.mode_ == mode_justice) {
                 adc_value_ = QString::number(static_cast<double>(in_message.data.data) * 3300 / 4095) + " mV";
@@ -125,7 +128,7 @@ void Processor::showAlarm(QString message) {
 }
 
 void Processor::prepareFileHeader() {
-    data_file_ << "Measurement start: " << date_time_.toString("yyyy-MM-dd hh:mm:ss").toStdString() << std::endl;
+    data_file_ << "Measurement start: " << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss").toStdString() << std::endl;
     if (measure_settings_.mode_ == mode_points) {
         data_file_ << "Point scan" << std::endl;
     }
@@ -136,7 +139,7 @@ void Processor::prepareFileHeader() {
 
 void Processor::prepareFileFooter()
 {
-    data_file_ << "Measurement stop: " << date_time_.toString("yyyy-MM-dd hh:mm:ss").toStdString() << std::endl;
+    data_file_ << "Measurement stop: " << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss").toStdString() << std::endl;
 }
 
 void Processor::lineStyleChanged(int style) {

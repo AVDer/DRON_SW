@@ -8,7 +8,9 @@
 enum ButtonID {
     Start = 0,
     Pause,
-    Stop
+    Stop,
+    Open_Damper,
+    Close_Damper
 };
 
 class SimpleButton : public QPushButton
