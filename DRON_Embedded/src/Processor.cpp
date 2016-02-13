@@ -92,6 +92,14 @@ void Processor::message_received(const std::pair<uint32_t, uint32_t>& message) {
 	case Commands::cmd_delay:
 		delay_ = message.second;
 		break;
+	case Commands::cmd_damper:
+		if (message.second == 1) {
+			motor_control_.open_damper();
+		}
+		else if (message.second == 2) {
+			motor_control_.close_damper();
+		}
+		break;
 	case Commands::cmd_sw_version:
 		get_communication()->send_data(Commands::cmd_sw_version, kSWVersion);
 		break;

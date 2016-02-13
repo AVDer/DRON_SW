@@ -9,7 +9,12 @@
 #ifndef COMMANDS_H_
 #define COMMANDS_H_
 
+#if __cplusplus >= 201103L
+#include <cstdint>
+#else
 typedef unsigned char uint8_t;
+typedef unsigned int uint32_t;
+#endif
 
 const uint8_t kMessageSize = 8;
 
@@ -23,6 +28,7 @@ enum Commands {
 	cmd_exposition,
 	cmd_break_time,
 	cmd_delay,
+	cmd_damper,
 	cmd_sync = 0xFF,
 	cmd_embedded_commands = 0xFF000000,
 	cmd_measurement_stopped,
