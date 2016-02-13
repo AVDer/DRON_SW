@@ -9,7 +9,7 @@
 #ifndef COMMANDS_H_
 #define COMMANDS_H_
 
-#include <cstdint>
+typedef unsigned char uint8_t;
 
 const uint8_t kMessageSize = 8;
 
@@ -49,7 +49,7 @@ enum Direction {
 	dir_backward
 };
 
-using Message = union Message_{
+union Message {
 	struct {
 		uint32_t command;
 		uint32_t data;

@@ -5,8 +5,8 @@
 #include <QString>
 #include <QWidget>
 
-enum class ButtonID {
-    Start,
+enum ButtonID {
+    Start = 0,
     Pause,
     Stop
 };

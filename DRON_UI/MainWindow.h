@@ -105,7 +105,7 @@ private:
 
     Processor *processor_;
 
-    std::unique_ptr<QSettings> settings_;
+    QSettings *settings_;
     QString file_name_;
 signals:
 

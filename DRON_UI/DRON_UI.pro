@@ -1,6 +1,5 @@
-QT += core gui widgets
+QT += core gui
 QT -= qml quick opengl webkit
-QMAKE_CXXFLAGS += -std=c++11
 
 TEMPLATE = app
 
@@ -38,3 +37,5 @@ LIBS += -lqwt5
 }
 
 DISTFILES +=
+
+include($$PWD/Libs/qextserialport/qextserialport.pri)

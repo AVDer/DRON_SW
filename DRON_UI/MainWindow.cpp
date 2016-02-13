@@ -28,9 +28,9 @@ void MainWindow::resizeEvent(QResizeEvent *ev) {
 void MainWindow::create_widgets() {
     processor_ = new Processor;
 
-    start_button_ = new SimpleButton(tr("Start"), ButtonID::Start);
-    pause_button_ = new SimpleButton(tr("Pause"), ButtonID::Pause);
-    stop_button_ = new SimpleButton(tr("Stop"), ButtonID::Stop);
+    start_button_ = new SimpleButton(tr("Start"), Start);
+    pause_button_ = new SimpleButton(tr("Pause"), Pause);
+    stop_button_ = new SimpleButton(tr("Stop"), Stop);
 
     point_scan_ = new QRadioButton(tr("Point scan"), this);
     integral_scan_ = new QRadioButton(tr("Integral scan"), this);
@@ -133,7 +133,7 @@ void MainWindow::create_layouts()
     settings_layout_->addWidget(new QLabel(tr("ms")), 0, 2);
     settings_layout_->addWidget(new QLabel(tr("Delay:")), 1, 0);
     settings_layout_->addWidget(delay_, 1, 1);
-    settings_layout_->addWidget(new QLabel(tr("s")), 1, 2);
+    settings_layout_->addWidget(new QLabel(tr("ms")), 1, 2);
     settings_layout_->addWidget(new QLabel(tr("Directory:")), 2, 0);
     settings_layout_->addWidget(directory_, 2, 1, 1, 2);
     settings_layout_->addWidget(new QLabel(tr("File:")), 3, 0);
@@ -261,22 +261,22 @@ void MainWindow::start_button_pressed() {
     processor_->setSelectedPort(com_port_box_->currentText());
 
     if (point_scan_->isChecked()) {
-        processor_->setMode(Mode::mode_points);
+        processor_->setMode(mode_points);
     }
     else if (integral_scan_->isChecked()) {
-        processor_->setMode(Mode::mode_integral);
+        processor_->setMode(mode_integral);
     }
     else if (adjust_scan_->isChecked()) {
-        processor_->setMode(Mode::mode_justice);
+        processor_->setMode(mode_justice);
     }
 
-    processor_->processButtons(ButtonID::Start);
+    processor_->processButtons(Start);
     start_button_->setEnabled(false);
     stop_button_->setEnabled(true);
 }
 
 void MainWindow::stop_button_pressed() {
-    processor_->processButtons(ButtonID::Stop);
+    processor_->processButtons(Stop);
     start_button_->setEnabled(true);
     stop_button_->setEnabled(false);
 }
@@ -308,5 +308,5 @@ void MainWindow::line_style_changed() {
 }
 
 void MainWindow::show_alarm(QString message) {
-    QMessageBox::information(nullptr, "Alarm", message);
+    QMessageBox::information(NULL, "Alarm", message);
 }

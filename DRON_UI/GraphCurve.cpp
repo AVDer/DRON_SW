@@ -5,7 +5,10 @@ GraphCurve* get_graph_curve() {
     return &graph_curve_;
 }
 
-GraphCurve::GraphCurve() {
+GraphCurve::GraphCurve():
+        size_(1),
+        style_(1)
+{
     curve_ = new QwtPlotCurve();
 }
 
@@ -45,9 +48,4 @@ void GraphCurve::set_style(int style) {
 void GraphCurve::set_size(int size) {
     size_ = size;
     set_style(style_);
-}
-
-std::pair<double, double> GraphCurve::axis_x_range() {
-    auto minmax = std::minmax_element(std::begin(data_x), std::end(data_x));
-    return std::make_pair(*minmax.first, *minmax.second);
 }

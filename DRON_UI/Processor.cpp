@@ -1,8 +1,5 @@
 #include "Processor.h"
 
-#include <chrono>
-#include <ctime>
-
 #include <QDebug>
 #include <QMessageBox>
 #include <QThread>
@@ -20,28 +17,26 @@ Processor::Processor(QObject *parent) :
 }
 
 Processor::~Processor() {
-    //com_port_.close();
+    com_port_.close();
     data_file_.close();
 }
 
 void Processor::processButtons(ButtonID button_number) {
     sendSyncMessage();
     switch (button_number) {
-    case ButtonID::Start:
-        /*
+    case Start:
         com_port_.setBaudRate(BAUD115200);
         com_port_.setDataBits(DATA_8);
         com_port_.setFlowControl(FLOW_OFF);
         com_port_.setParity(PAR_NONE);
         com_port_.setPortName(measure_settings_.selected_port_);
         com_port_.open(QIODevice::ReadWrite);
-        */
 
-        if (measure_settings_.mode_ == Mode::mode_points || measure_settings_.mode_ == Mode::mode_integral) {
-            data_file_.open(file_manager_.full_filename_.toStdString());
+        if (measure_settings_.mode_ == mode_points || measure_settings_.mode_ == mode_integral) {
+            data_file_.open(file_manager_.full_filename_.toStdString().c_str());
             if (!data_file_.is_open()) {
                 showAlarm("File open error");
-                //com_port_.close();
+                com_port_.close();
                 return;
             }
             prepareFileHeader();
@@ -52,16 +47,16 @@ void Processor::processButtons(ButtonID button_number) {
         sendMessage(cmd_step, measure_settings_.step_ * 2);
         sendMessage(cmd_direction,
                     (measure_settings_.start_angle_ < measure_settings_.stop_angle_) ?
-                        Direction::dir_forward : Direction::dir_backward);
+                        dir_forward : dir_backward);
         sendMessage(cmd_exposition, measure_settings_.exposition_ * 1000.);
-        sendMessage(cmd_break_time, measure_settings_.brake_time_);
+        sendMessage(cmd_break_time, measure_settings_.brake_time_ * 1000.);
         sendMessage(cmd_delay, measure_settings_.delay_ * 1000.);
         sendMessage(cmd_start, measure_settings_.mode_);
 
         timer_.start(500);
         get_graph_curve()->clear();
         break;
-    case ButtonID::Stop: // Stop button
+    case Stop: // Stop button
         sendMessage(cmd_stop, 0);
         prepareFileFooter();
         data_file_.close();
@@ -72,7 +67,6 @@ void Processor::processButtons(ButtonID button_number) {
 }
 
 void Processor::dataUpdate() {
-    /*
     int read_index = 0;
     char c;
     Message in_message;
@@ -88,26 +82,25 @@ void Processor::dataUpdate() {
         if (++read_index >= kMessageSize) {
             read_index = 0;
             qDebug() << in_message.data.command << '\t' << in_message.data.data;
-            if (in_message.data.command == Commands::cmd_alarm) {
+            if (in_message.data.command == cmd_alarm) {
                 showAlarm("Speed is too high");
             }
-            else if (in_message.data.command == Commands::cmd_measurement_stopped) {
+            else if (in_message.data.command == cmd_measurement_stopped) {
                 prepareFileFooter();
                 data_file_.close();
                 showAlarm("Measurement stopped");
             }
-            else if (measure_settings_.mode_ == Mode::mode_points || measure_settings_.mode_ == Mode::mode_integral){
+            else if (measure_settings_.mode_ == mode_points || measure_settings_.mode_ == mode_integral){
                 get_graph_curve()->add_point(measure_settings_.start_angle_ + in_message.data.command / 200.,
                                              in_message.data.data);
                 data_file_ << measure_settings_.start_angle_ + in_message.data.command / 200. << '\t' << in_message.data.data << std::endl;
             }
-            else if (measure_settings_.mode_ == Mode::mode_justice) {
+            else if (measure_settings_.mode_ == mode_justice) {
                 adc_value_ = QString::number(static_cast<double>(in_message.data.data) * 3300 / 4095) + " mV";
                 emit adcValueChanged(adc_value_);
             }
         }
     }
-    */
 }
 
 void Processor::sendMessage(uint32_t command, uint32_t data, bool queued) {
@@ -118,36 +111,32 @@ void Processor::sendMessage(uint32_t command, uint32_t data, bool queued) {
         message_queue_.push(out_message);
     }
     else {
-        //com_port_.write(out_message.chars, kMessageSize);
+        com_port_.write(out_message.chars, kMessageSize);
     }
 }
 
 void Processor::sendSyncMessage() {
-    sendMessage(Commands::cmd_sync_32, Commands::cmd_sync_32);
-    sendMessage(Commands::cmd_sync_32, Commands::cmd_sync_32);
+    sendMessage(cmd_sync_32, cmd_sync_32);
+    sendMessage(cmd_sync_32, cmd_sync_32);
 }
 
 void Processor::showAlarm(QString message) {
-    QMessageBox::information(nullptr, "Alarm", message);
+    QMessageBox::information(NULL, "Alarm", message);
 }
 
 void Processor::prepareFileHeader() {
-    std::time_t dron_time_;
-    dron_time_ = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    data_file_ << "Measurement start: " << std::ctime(&dron_time_) << std::endl;
-    if (measure_settings_.mode_ == Mode::mode_points) {
+    data_file_ << "Measurement start: " << date_time_.toString("yyyy-MM-dd hh:mm:ss").toStdString() << std::endl;
+    if (measure_settings_.mode_ == mode_points) {
         data_file_ << "Point scan" << std::endl;
     }
-    else if (measure_settings_.mode_ == Mode::mode_integral) {
+    else if (measure_settings_.mode_ == mode_integral) {
         data_file_ << "Integral scan" << std::endl;
     }
 }
 
 void Processor::prepareFileFooter()
 {
-    std::time_t dron_time_;
-    dron_time_ = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    data_file_ << "Measurement stop: " << std::ctime(&dron_time_) << std::endl;
+    data_file_ << "Measurement stop: " << date_time_.toString("yyyy-MM-dd hh:mm:ss").toStdString() << std::endl;
 }
 
 void Processor::lineStyleChanged(int style) {

@@ -4,6 +4,7 @@
 #include <fstream>
 #include <queue>
 
+#include <QDateTime>
 #include <QDebug>
 #include <QObject>
 #include <QSettings>
@@ -13,7 +14,7 @@
 #include "MeasureSettings.h"
 #include "SimpleButton.h"
 
-//#include "Libs/qextserialport/qextserialport.h"
+#include "Libs/qextserialport/qextserialport.h"
 #include "../DRON_Embedded/include/Commands.h"
 
 class Processor : public QObject
@@ -94,13 +95,14 @@ private:
     void prepareFileFooter();
 
     QTimer timer_;
+    QDateTime date_time_;
     FileManager file_manager_;
     MeasureSettings measure_settings_;
 
-    //QextSerialPort com_port_;
+    QextSerialPort com_port_;
     std::ofstream data_file_;
     std::queue<Message> message_queue_;
-    QString adc_value_ = 0;
+    QString adc_value_;
 };
 
 #endif // PROCESSOR_H

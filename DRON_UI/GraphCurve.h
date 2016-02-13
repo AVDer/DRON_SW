@@ -9,6 +9,8 @@
 #include "Libs/qwt/include/qwt_plot_curve.h"
 #include "Libs/qwt/include/qwt_symbol.h"
 
+#define kGraphColor Qt::red
+
 class QuickQwtPlot;
 class GraphCurve;
 GraphCurve* get_graph_curve();
@@ -25,13 +27,12 @@ public:
     std::pair<double, double> axis_x_range();
 
 private:
-    const QColor kGraphColor = Qt::red;
     QwtPlot* plot_;
     QwtPlotCurve* curve_;
     std::vector<double> data_x;
     std::vector<double> data_y;
-    int size_ = 1;
-    int style_ = 1;
+    int size_;
+    int style_;
 };
 
 #endif // GRAPHCURVE_H
