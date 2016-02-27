@@ -1,4 +1,4 @@
-QT += core gui
+QT += core gui widgets
 QT -= qml quick opengl webkit
 
 TEMPLATE = app
@@ -23,17 +23,18 @@ HEADERS += \
     Communication.h \
     GraphCurve.h \
     SimpleButton.h \
-    LimitsInput.h
+    LimitsInput.h \
+    Version.h
 
-INCLUDEPATH += $$PWD/Libs/qwt/include
+INCLUDEPATH += $$PWD/Libs/qwt6/include
 
-LIBS += -L$$PWD/Libs/qwt/lib/
+LIBS += -L$$PWD/Libs/qwt6/lib/
 
 unix {
-LIBS += -lqwt5
+LIBS += -lqwt
 }
 win32 {
-LIBS += -lqwt5
+LIBS += -lqwt
 }
 
 DISTFILES +=

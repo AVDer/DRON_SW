@@ -2,6 +2,8 @@
 
 #include <QMessageBox>
 
+#include "Version.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     settings_(new QSettings("StarCon", "DRON Control"))
@@ -14,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     restore_settings();
 
     setCentralWidget(main_splitter_);
-    setWindowTitle(tr("DRON User Interface 2.3.2"));
+    setWindowTitle(kSWVersion);
     showMaximized();
 }
 
@@ -121,13 +123,13 @@ void MainWindow::create_layouts()
 
     angle_layout_->addWidget(new QLabel(tr("Start angle:")), 0, 0);
     angle_layout_->addWidget(start_angle_, 0, 1);
-    angle_layout_->addWidget(new QLabel(tr(" °")), 0, 2);
+    angle_layout_->addWidget(new QLabel(tr(" deg")), 0, 2);
     angle_layout_->addWidget(new QLabel(tr("Stop angle:")), 1, 0);
     angle_layout_->addWidget(stop_angle_, 1, 1);
-    angle_layout_->addWidget(new QLabel(tr(" °")), 1, 2);
+    angle_layout_->addWidget(new QLabel(tr(" deg")), 1, 2);
     angle_layout_->addWidget(new QLabel(tr("Step:")), 2, 0);
     angle_layout_->addWidget(step_, 2, 1);
-    angle_layout_->addWidget(new QLabel(tr("x 0.01 °")), 2, 2);
+    angle_layout_->addWidget(new QLabel(tr("x 0.01 deg")), 2, 2);
     angle_layout_->addWidget(new QLabel(tr("Exposition:")), 3, 0);
     angle_layout_->addWidget(exposition_, 3, 1);
     angle_layout_->addWidget(new QLabel(tr("s")), 3, 2);

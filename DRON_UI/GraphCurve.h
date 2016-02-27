@@ -1,13 +1,15 @@
 #ifndef GRAPHCURVE_H
 #define GRAPHCURVE_H
 
+#define QWT_VER_6
+
 #include <algorithm>
 #include <utility>
 #include <vector>
 
-#include "Libs/qwt/include/qwt_plot.h"
-#include "Libs/qwt/include/qwt_plot_curve.h"
-#include "Libs/qwt/include/qwt_symbol.h"
+#include "qwt_plot.h"
+#include "qwt_plot_curve.h"
+#include "qwt_symbol.h"
 
 #define kGraphColor Qt::red
 

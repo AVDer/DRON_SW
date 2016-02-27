@@ -22,10 +22,10 @@
 #include "Processor.h"
 #include "SimpleButton.h"
 
-#include "Libs/qwt/include/qwt_plot_magnifier.h"
-#include "Libs/qwt/include/qwt_plot_panner.h"
-#include "Libs/qwt/include/qwt_plot_grid.h"
-#include "Libs/qwt/include/qwt_symbol.h"
+#include "qwt_plot_magnifier.h"
+#include "qwt_plot_panner.h"
+#include "qwt_plot_grid.h"
+#include "qwt_symbol.h"
 
 class MainWindow : public QMainWindow
 {

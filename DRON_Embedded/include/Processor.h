@@ -27,9 +27,10 @@ public:
 	}
 	void message_received(const std::pair<uint32_t, uint32_t>& message);
 	void run();
-	void tick_event() {tick_event_ = true;}
-	bool tick_processed() { return !tick_event_; }
-	bool running() {return mode_ != mode_stop;}
+	void stop_event();
+	inline void tick_event() {tick_event_ = true;}
+	inline bool tick_processed() { return !tick_event_; }
+	inline bool running() {return mode_ != mode_stop;}
 private:
 	const uint32_t kADC_Delay = 500;
 

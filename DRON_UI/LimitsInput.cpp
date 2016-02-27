@@ -4,5 +4,5 @@
 
 LimitsInput::LimitsInput(QWidget *parent) :
     QLineEdit(parent) {
-    setValidator(new QDoubleValidator(this));
+    //setValidator(new QDoubleValidator(this));
 }

@@ -30,12 +30,12 @@ UART::UART() {
 	USART_Init(USART1, &USART1_init_struct);
 
 	NVIC_InitTypeDef NVIC_InitStructure;
-	NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn; //канал
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0; //приоритет
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;//приоритет субгруппы
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; //включаем канал
-	NVIC_Init(&NVIC_InitStructure); //инициализируем
-	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);  //включаем нужное прерывание щас нам прием
+	NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
 
 	USART_Cmd(USART1, ENABLE);
 	USART_DMACmd(USART1, USART_DMAReq_Tx, ENABLE);

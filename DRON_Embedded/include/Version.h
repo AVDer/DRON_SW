@@ -9,7 +9,7 @@
 #ifndef VERSION_H_
 #define VERSION_H_
 
-const uint32_t kSWVersion = 0x00010000;
+const uint32_t kSWVersion = 0x00010100;
 
 
 

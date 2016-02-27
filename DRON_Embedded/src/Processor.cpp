@@ -56,9 +56,11 @@ void Processor::message_received(const std::pair<uint32_t, uint32_t>& message) {
 	case Commands::cmd_start:
 		angle_counter_ = 0;
 		step_counter_ = 0;
-		move_motor();
-		motor_control_.open_damper();
 		mode_ = message.second;
+		if (mode_ == Mode::mode_integral || mode_ == Mode::mode_points) {
+			move_motor();
+			motor_control_.open_damper();
+		}
 		break;
 	case Commands::cmd_stop:
 		motor_control_.close_damper();
@@ -120,11 +122,18 @@ void Processor::move_motor() {
 	}
 }
 
+void Processor::stop_event() {
+	motor_control_.close_damper();
+	mode_ = Mode::mode_stop;
+	direction_ = Direction::dir_none;
+	move_motor();
+}
+
 void Processor::run() {
 	if (!running()) {
 		return;
 	}
-	if (mode_ == Mode::mode_points && !tick_processed()) { // Point scan
+	if (mode_ == Mode::mode_points && tick_event_) { // Point scan
 		if (angle_counter_ < counts_) {
 			if (++step_counter_ >= step_) {
 				step_counter_ = 0;
@@ -139,23 +148,17 @@ void Processor::run() {
 			}
 		}
 		else {
-			motor_control_.close_damper();
-			mode_ = Mode::mode_stop;
-			direction_ = Direction::dir_none;
-			move_motor();
+			stop_event();
 			get_communication()->send_data(Commands::cmd_measurement_stopped, 0);
 		}
 		++angle_counter_;
 	}
-	else if (mode_ == Mode::mode_integral && !tick_processed()) {
+	else if (mode_ == Mode::mode_integral && tick_event_) { // Integral scan
 		if (angle_counter_ < counts_) {
 			get_communication()->send_data(angle_counter_, adc_.get_adc_value());
 		}
 		else {
-			motor_control_.close_damper();
-			mode_ = Mode::mode_stop;
-			direction_ = Direction::dir_none;
-			move_motor();
+			stop_event();
 			get_communication()->send_data(Commands::cmd_measurement_stopped, 0);
 		}
 		++angle_counter_;
@@ -164,16 +167,21 @@ void Processor::run() {
 		get_communication()->send_data(angle_counter_, adc_.get_adc_value());
 		Delay::ms(kADC_Delay);
 	}
-	tick_event_ = false;
+	if (tick_event_) {
+	  tick_event_ = false;
+	}
 }
 
 extern "C" void EXTI1_IRQHandler(void)
 {
+  //static int int_num {0};
 	if(EXTI_GetITStatus(EXTI_Line1) != RESET) {
 		if (!get_processor()->tick_processed() && get_processor()->running()) {
 			get_communication()->send_data(Commands::cmd_alarm, Alarms::alarm_too_fast);
+			get_processor()->stop_event();
 		}
 		get_processor()->tick_event();
 		EXTI_ClearITPendingBit(EXTI_Line1);
+		//++int_num;
 	}
 }
