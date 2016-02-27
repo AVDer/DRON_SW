@@ -14,7 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
     restore_settings();
 
     setCentralWidget(main_splitter_);
-    setWindowTitle(tr("DRON User Interface 2.3.0"));
+    setWindowTitle(tr("DRON User Interface 2.3.2"));
+    showMaximized();
 }
 
 MainWindow::~MainWindow() {
@@ -66,12 +67,16 @@ void MainWindow::create_widgets() {
 
     mode_group_box_ = new QGroupBox(tr("Mode"), this);
     angle_group_box_ = new QGroupBox(tr("Parameters"), this);
+    ticks_group_box_ = new QGroupBox(tr("Ticks"), this);
     meas_widget_ = new QWidget(this);
     settings_widget_ = new QWidget(this);
     line_widget_ = new QWidget(this);
     left_widget_ = new QWidget(this);
     main_splitter_ = new QSplitter(this);
     right_panel_ = new QTabWidget(this);
+
+    ticks_received_ = new QLineEdit(this);
+    last_ticks_ = new QLineEdit(this);
 }
 
 void MainWindow::create_layouts()
@@ -83,6 +88,7 @@ void MainWindow::create_layouts()
     meas_layout_ = new QVBoxLayout;
     angle_layout_ = new QGridLayout;
     settings_layout_ = new QGridLayout;
+    ticks_layout_ = new QGridLayout;
     settings_v_layout_ = new QVBoxLayout;
     line_layout_ = new QGridLayout;
     line_v_layout_ = new QVBoxLayout;
@@ -90,7 +96,7 @@ void MainWindow::create_layouts()
 
     button_layout_->addStretch(-1);
     button_layout_->addWidget(start_button_);
-    button_layout_->addWidget(pause_button_);
+    //button_layout_->addWidget(pause_button_);
     button_layout_->addWidget(stop_button_);
 
     graph_layout_->addWidget(max_y_edit_, 0, 0);
@@ -128,9 +134,15 @@ void MainWindow::create_layouts()
     angle_group_box_->setLayout(angle_layout_);
     meas_layout_->addWidget(angle_group_box_);
 
+    ticks_layout_->addWidget(new QLabel(tr("Ticks received:")), 0, 0);
+    ticks_layout_->addWidget(ticks_received_, 0, 1);
+    ticks_layout_->addWidget(new QLabel(tr("Last tick:")), 1, 0);
+    ticks_layout_->addWidget(last_ticks_, 1, 1);
+    ticks_group_box_->setLayout(ticks_layout_);
+    meas_layout_->addWidget(ticks_group_box_);
+
     meas_layout_->addWidget(voltage_);
     meas_widget_->setLayout(meas_layout_);
-
     settings_layout_->addWidget(new QLabel(tr("Braking time:")), 0, 0);
     settings_layout_->addWidget(braking_time_, 0, 1);
     settings_layout_->addWidget(new QLabel(tr("ms")), 0, 2);
@@ -191,6 +203,9 @@ void MainWindow::create_connections()
 
     connect(damper_open_button_, SIGNAL(button_pressed(ButtonID)), SLOT(open_damper_pressed()));
     connect(damper_close_button_, SIGNAL(button_pressed(ButtonID)), SLOT(close_damper_pressed()));
+
+    connect(processor_, SIGNAL(tickReceived(QString)), ticks_received_, SLOT(setText(QString)));
+    connect(processor_, SIGNAL(lastTickChanged(QString)), last_ticks_, SLOT(setText(QString)));
 }
 
 void MainWindow::adjust_widgets()
@@ -204,6 +219,9 @@ void MainWindow::adjust_widgets()
     voltage_->setText(tr("0 mV"));
     voltage_->setReadOnly(true);
     voltage_->setAlignment(Qt::AlignHCenter);
+
+    ticks_received_->setReadOnly(true);
+    last_ticks_->setReadOnly(true);
 
     line_width_->setValue(1);
 
@@ -311,7 +329,7 @@ void MainWindow::x_axis_change() {
 }
 
 void MainWindow::y_axis_change() {
-    graph_plot_->setAxisScale(QwtPlot::xBottom, min_y_edit_->text().toDouble(), max_y_edit_->text().toDouble());
+    graph_plot_->setAxisScale(QwtPlot::yLeft, min_y_edit_->text().toDouble(), max_y_edit_->text().toDouble());
     graph_plot_->updateAxes();
     graph_plot_->replot();
 }

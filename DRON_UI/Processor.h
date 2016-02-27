@@ -80,6 +80,8 @@ signals:
     void adcValueChanged(QString);
     void directoryChanged(QString);
     void filenameChanged(QString);
+    void tickReceived(QString);
+    void lastTickChanged(QString);
 
 public slots:
     void dataUpdate();
@@ -103,6 +105,8 @@ private:
     std::ofstream data_file_;
     std::queue<Message> message_queue_;
     QString adc_value_;
+    int ticks_received_;
+    int last_tick_;
 };
 
 #endif // PROCESSOR_H

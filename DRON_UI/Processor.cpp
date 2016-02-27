@@ -55,13 +55,23 @@ void Processor::processButtons(ButtonID button_number) {
 
         timer_.start(500);
         get_graph_curve()->clear();
+        ticks_received_ = 0;
+        last_tick_ = 0;
+        emit tickReceived(QString::number(ticks_received_));
+        emit lastTickChanged(QString::number(last_tick_));
         break;
     case Stop: // Stop button
         sendMessage(cmd_stop, 0);
         prepareFileFooter();
         data_file_.close();
         break;
-    default:
+    case Open_Damper:
+        sendMessage(cmd_damper, 1);
+        break;
+    case Close_Damper:
+        sendMessage(cmd_damper, 2);
+        break;
+   default:
         break;
     }
 }
@@ -96,6 +106,10 @@ void Processor::dataUpdate() {
                     received_angle <= measure_settings_.stop_angle_) {
                     get_graph_curve()->add_point(received_angle, in_message.data.data);
                     data_file_ << received_angle << '\t' << in_message.data.data << std::endl;
+                    ++ticks_received_;
+                    last_tick_ = in_message.data.command;
+                    emit tickReceived(QString::number(ticks_received_));
+                    emit lastTickChanged(QString::number(last_tick_));
                 }
             }
             else if (measure_settings_.mode_ == mode_justice) {

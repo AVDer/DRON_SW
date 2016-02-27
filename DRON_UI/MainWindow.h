@@ -84,6 +84,9 @@ private:
     QSpinBox *line_width_;
     QComboBox *com_port_box_;
 
+    QLineEdit *ticks_received_;
+    QLineEdit *last_ticks_;
+
     QwtPlot *graph_plot_;
     QwtPlotGrid *graph_grid_;
     QwtPlotMagnifier *graph_magnifier_;
@@ -93,12 +96,14 @@ private:
 
     QGroupBox *mode_group_box_;
     QGroupBox *angle_group_box_;
+    QGroupBox *ticks_group_box_;
 
     QVBoxLayout *left_panel_layout_;
     QHBoxLayout *button_layout_;
     QGridLayout *graph_layout_;
     QGridLayout *angle_layout_;
     QGridLayout *settings_layout_;
+    QGridLayout *ticks_layout_;
     QVBoxLayout *settings_v_layout_;
     QGridLayout *line_layout_;
     QVBoxLayout *line_v_layout_;
