@@ -126,6 +126,7 @@ public slots:
     void x_axis_change();
     void y_axis_change();
     void line_style_changed();
+    void embeddedSW(QString);
 };
 
 #endif // MAINWINDOW_H

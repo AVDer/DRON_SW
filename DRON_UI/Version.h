@@ -3,6 +3,6 @@
 
 #include <QString>
 
-const QString kSWVersion = QObject::tr("DRON User Interface 2.3.3");
+const QString kSWVersion = QObject::tr("DRON User Interface 2.4.1");
 
 #endif // VERSION_H

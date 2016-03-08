@@ -13,8 +13,8 @@
 #include "FileManager.h"
 #include "MeasureSettings.h"
 #include "SimpleButton.h"
+#include "UartManager.h"
 
-#include "Libs/qextserialport/qextserialport.h"
 #include "../DRON_Embedded/include/Commands.h"
 
 class Processor : public QObject
@@ -82,6 +82,7 @@ signals:
     void filenameChanged(QString);
     void tickReceived(QString);
     void lastTickChanged(QString);
+    void embeddedSW(QString);
 
 public slots:
     void dataUpdate();
@@ -100,8 +101,8 @@ private:
     QDateTime date_time_;
     FileManager file_manager_;
     MeasureSettings measure_settings_;
+    UartManager uart_;
 
-    QextSerialPort com_port_;
     std::ofstream data_file_;
     std::queue<Message> message_queue_;
     QString adc_value_;

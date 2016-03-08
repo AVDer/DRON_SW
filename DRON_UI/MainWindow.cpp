@@ -208,6 +208,7 @@ void MainWindow::create_connections()
 
     connect(processor_, SIGNAL(tickReceived(QString)), ticks_received_, SLOT(setText(QString)));
     connect(processor_, SIGNAL(lastTickChanged(QString)), last_ticks_, SLOT(setText(QString)));
+    connect(processor_, SIGNAL(embeddedSW(QString)), SLOT(embeddedSW(QString)));
 }
 
 void MainWindow::adjust_widgets()
@@ -343,6 +344,11 @@ void MainWindow::line_style_changed() {
     else {
         processor_->lineStyleChanged(2);
     }
+}
+
+void MainWindow::embeddedSW(QString version)
+{
+    setWindowTitle(kSWVersion + " / " + version);
 }
 
 void MainWindow::show_alarm(QString message) {

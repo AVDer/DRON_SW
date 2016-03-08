@@ -17,7 +17,6 @@ Processor::Processor(QObject *parent) :
 }
 
 Processor::~Processor() {
-    com_port_.close();
     data_file_.close();
 }
 
@@ -25,23 +24,17 @@ void Processor::processButtons(ButtonID button_number) {
     sendSyncMessage();
     switch (button_number) {
     case Start:
-        com_port_.setBaudRate(BAUD115200);
-        com_port_.setDataBits(DATA_8);
-        com_port_.setFlowControl(FLOW_OFF);
-        com_port_.setParity(PAR_NONE);
-        com_port_.setPortName(measure_settings_.selected_port_);
-        com_port_.open(QIODevice::ReadWrite);
-
         if (measure_settings_.mode_ == mode_points || measure_settings_.mode_ == mode_integral) {
             data_file_.open(file_manager_.full_filename_.toStdString().c_str());
             if (!data_file_.is_open()) {
                 showAlarm("File open error");
-                com_port_.close();
                 return;
             }
             prepareFileHeader();
         }
+        uart_.set_port(measure_settings_.selected_port_);
 
+        sendMessage(cmd_sw_version, 0);
         sendMessage(cmd_counts,
                     fabs(measure_settings_.start_angle_ - measure_settings_.stop_angle_) * 100. + 2);
         sendMessage(cmd_step, measure_settings_.step_);
@@ -81,19 +74,24 @@ void Processor::dataUpdate() {
     char c;
     Message in_message;
     if (!message_queue_.empty()) {
-        if (com_port_.isOpen()) {
-            com_port_.write(message_queue_.front().chars, kMessageSize);
+        if (uart_.is_open()) {
+            uart_.write(message_queue_.front().chars, kMessageSize);
             message_queue_.pop();
         }
     }
-    while (com_port_.bytesAvailable() > 0) {
-        com_port_.getChar(&c);
+    while (uart_.is_bytes_available() > 0) {
+        c = uart_.get_char();
         in_message.chars[read_index] = c;
         if (++read_index >= kMessageSize) {
             read_index = 0;
             //qDebug() << in_message.data.command << '\t' << in_message.data.data;
             if (in_message.data.command == cmd_alarm) {
                 showAlarm("Speed is too high");
+            }
+            else if (in_message.data.command == cmd_sw_version) {
+                emit embeddedSW(QString::number(in_message.raw_data[7]) + '.' +
+                        QString::number(in_message.raw_data[6]) + '.' +
+                        QString::number(in_message.raw_data[5]));
             }
             else if (in_message.data.command == cmd_measurement_stopped) {
                 prepareFileFooter();
@@ -128,7 +126,7 @@ void Processor::sendMessage(uint32_t command, uint32_t data, bool queued) {
         message_queue_.push(out_message);
     }
     else {
-        com_port_.write(out_message.chars, kMessageSize);
+        uart_.write(out_message.chars, kMessageSize);
     }
 }
 

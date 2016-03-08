@@ -9,7 +9,7 @@
 #ifndef VERSION_H_
 #define VERSION_H_
 
-const uint32_t kSWVersion = 0x00010100;
+const uint32_t kSWVersion = 0x01020304;
 
 enum IPrio {
   ticks_prio = 0,
