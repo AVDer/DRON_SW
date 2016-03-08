@@ -11,7 +11,8 @@ SOURCES += main.cpp \
     Communication.cpp \
     GraphCurve.cpp \
     SimpleButton.cpp \
-    LimitsInput.cpp
+    LimitsInput.cpp \
+    UartManager.cpp
 
 RESOURCES +=
 
@@ -24,7 +25,8 @@ HEADERS += \
     GraphCurve.h \
     SimpleButton.h \
     LimitsInput.h \
-    Version.h
+    Version.h \
+    UartManager.h
 
 INCLUDEPATH += $$PWD/Libs/qwt6/include
 

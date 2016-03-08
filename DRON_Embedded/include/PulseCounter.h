@@ -15,7 +15,7 @@ class PulseCounter {
 public:
 	PulseCounter();
 	void reset_counter();
-	uint16_t get_counter();
+	uint32_t get_counter();
 
 private:
 	void gpio_init();

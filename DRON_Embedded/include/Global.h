@@ -1,8 +1,8 @@
 /**
- * @file   Version.h
+ * @file   Global.h
  * @Author Andrey Derevyanko <derandr@gmail.com>
  * @date   2016-01-23
- * @brief  Embedded SW version definition
+ * @brief  Global system settings
  *
  */
 
@@ -11,6 +11,12 @@
 
 const uint32_t kSWVersion = 0x00010100;
 
+enum IPrio {
+  ticks_prio = 0,
+  pulses_prio = 1,
+  uart_prio = 2,
+  timer_prio = 8
+};
 
 
 #endif /* VERSION_H_ */

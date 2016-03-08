@@ -43,8 +43,8 @@ void Processor::processButtons(ButtonID button_number) {
         }
 
         sendMessage(cmd_counts,
-                    fabs(measure_settings_.start_angle_ - measure_settings_.stop_angle_) * 200. + 1);
-        sendMessage(cmd_step, measure_settings_.step_ * 2);
+                    fabs(measure_settings_.start_angle_ - measure_settings_.stop_angle_) * 100. + 2);
+        sendMessage(cmd_step, measure_settings_.step_);
         sendMessage(cmd_direction,
                     (measure_settings_.start_angle_ < measure_settings_.stop_angle_) ?
                     dir_forward : dir_backward);
@@ -91,7 +91,7 @@ void Processor::dataUpdate() {
         in_message.chars[read_index] = c;
         if (++read_index >= kMessageSize) {
             read_index = 0;
-            qDebug() << in_message.data.command << '\t' << in_message.data.data;
+            //qDebug() << in_message.data.command << '\t' << in_message.data.data;
             if (in_message.data.command == cmd_alarm) {
                 showAlarm("Speed is too high");
             }
@@ -101,7 +101,7 @@ void Processor::dataUpdate() {
                 showAlarm("Measurement stopped");
             }
             else if (measure_settings_.mode_ == mode_points || measure_settings_.mode_ == mode_integral){
-                double received_angle = measure_settings_.start_angle_ + in_message.data.command / 200.;
+                double received_angle = measure_settings_.start_angle_ + in_message.data.command / 100.;
                 if (received_angle >= measure_settings_.start_angle_ &&
                     received_angle <= measure_settings_.stop_angle_) {
                     get_graph_curve()->add_point(received_angle, in_message.data.data);

@@ -11,7 +11,7 @@
 
 #include "Communication.h"
 #include "delay.h"
-#include "Version.h"
+#include "Global.h"
 
 Processor* get_processor() {
 	static Processor processor_;
@@ -39,13 +39,13 @@ void Processor::interrupt_init() {
 	EXTI_StructInit(&exti_init_struct);
 	exti_init_struct.EXTI_Line = EXTI_Line1;
 	exti_init_struct.EXTI_Mode = EXTI_Mode_Interrupt;
-	exti_init_struct.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
+	exti_init_struct.EXTI_Trigger = EXTI_Trigger_Rising;
 	exti_init_struct.EXTI_LineCmd = ENABLE;
 	EXTI_Init(&exti_init_struct);
 
 	NVIC_InitTypeDef NVIC_InitStructure;
 	NVIC_InitStructure.NVIC_IRQChannel = EXTI1_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = IPrio::ticks_prio;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
@@ -57,10 +57,16 @@ void Processor::message_received(const std::pair<uint32_t, uint32_t>& message) {
 		angle_counter_ = 0;
 		step_counter_ = 0;
 		mode_ = message.second;
-		if (mode_ == Mode::mode_integral || mode_ == Mode::mode_points) {
-			move_motor();
+		tick_event_ = false;
+		if (mode_ == Mode::mode_points) {
 			motor_control_.open_damper();
+			step_counter_ = step_;
+			tick_event_ = true;
 		}
+		else if (mode_ == Mode::mode_integral) {
+      motor_control_.open_damper();
+      move_motor();
+    }
 		break;
 	case Commands::cmd_stop:
 		motor_control_.close_damper();
