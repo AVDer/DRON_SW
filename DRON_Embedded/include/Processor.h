@@ -28,7 +28,11 @@ public:
 	void message_received(const std::pair<uint32_t, uint32_t>& message);
 	void run();
 	void stop_event();
-	inline void tick_event() {tick_event_ = true;}
+	inline void tick_event() {
+	  if (mode_ == Mode::mode_points || mode_ == Mode::mode_integral) {
+	    tick_event_ = true;
+	  }
+	}
 	inline bool tick_processed() { return !tick_event_; }
 	inline bool running() {return mode_ != mode_stop;}
 private:

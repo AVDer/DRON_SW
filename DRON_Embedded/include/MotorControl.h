@@ -30,7 +30,7 @@ private:
 
 	uint16_t kForwardPin = GPIO_Pin_2;
 	uint16_t kBackwardPin = GPIO_Pin_3;
-	uint16_t kStopPin = GPIO_Pin_5;
+	uint16_t kStopPin = GPIO_Pin_2;
 	uint16_t kDamperPin = GPIO_Pin_3;
 	void gpio_init();
 };
