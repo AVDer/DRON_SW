@@ -1,4 +1,4 @@
-QT += core gui widgets
+QT += core gui
 QT -= qml quick opengl webkit
 
 TEMPLATE = app
@@ -28,15 +28,15 @@ HEADERS += \
     Version.h \
     UartManager.h
 
-INCLUDEPATH += $$PWD/Libs/qwt6/include
+INCLUDEPATH += $$PWD/Libs/qwt/include
 
-LIBS += -L$$PWD/Libs/qwt6/lib/
+LIBS += -L$$PWD/Libs/qwt/lib/
 
 unix {
-LIBS += -lqwt
+LIBS += -lqwt5
 }
 win32 {
-LIBS += -lqwt
+LIBS += -lqwt5
 }
 
 DISTFILES +=

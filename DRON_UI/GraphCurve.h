@@ -1,7 +1,7 @@
 #ifndef GRAPHCURVE_H
 #define GRAPHCURVE_H
 
-#define QWT_VER_6
+#define QWT_VER_5
 
 #include <algorithm>
 #include <utility>
@@ -23,6 +23,7 @@ public:
     GraphCurve();
     void set_plot(QwtPlot *plot);
     void add_point(double x, double y);
+    void redraw();
     void clear();
     void set_style(int style);
     void set_size(int size);

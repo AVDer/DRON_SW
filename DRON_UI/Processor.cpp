@@ -31,6 +31,10 @@ void Processor::processButtons(ButtonID button_number) {
                 return;
             }
             prepareFileHeader();
+            emit voltmeterVisible(false);
+        }
+        else {
+            emit voltmeterVisible(true);
         }
         uart_.set_port(measure_settings_.selected_port_);
 
@@ -50,8 +54,6 @@ void Processor::processButtons(ButtonID button_number) {
         get_graph_curve()->clear();
         ticks_received_ = 0;
         last_tick_ = 0;
-        emit tickReceived(QString::number(ticks_received_));
-        emit lastTickChanged(QString::number(last_tick_));
         break;
     case Stop: // Stop button
         sendMessage(cmd_stop, 0);
@@ -106,8 +108,7 @@ void Processor::dataUpdate() {
                     data_file_ << received_angle << '\t' << in_message.data.data << std::endl;
                     ++ticks_received_;
                     last_tick_ = in_message.data.command;
-                    emit tickReceived(QString::number(ticks_received_));
-                    emit lastTickChanged(QString::number(last_tick_));
+                    emit angleReceived(QString::number(received_angle));
                 }
             }
             else if (measure_settings_.mode_ == mode_justice) {
@@ -116,6 +117,7 @@ void Processor::dataUpdate() {
             }
         }
     }
+    get_graph_curve()->redraw();
 }
 
 void Processor::sendMessage(uint32_t command, uint32_t data, bool queued) {

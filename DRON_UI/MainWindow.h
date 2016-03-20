@@ -85,7 +85,6 @@ private:
     QComboBox *com_port_box_;
 
     QLineEdit *ticks_received_;
-    QLineEdit *last_ticks_;
 
     QwtPlot *graph_plot_;
     QwtPlotGrid *graph_grid_;

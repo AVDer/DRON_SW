@@ -21,6 +21,9 @@ void GraphCurve::set_plot(QwtPlot *plot) {
 void GraphCurve::add_point(double x, double y) {
     data_x.push_back(x);
     data_y.push_back(y);
+}
+
+void GraphCurve::redraw() {
 #ifdef QWT_VER_6
     curve_->setSamples(data_x.data(), data_y.data(), data_x.size());
 #else

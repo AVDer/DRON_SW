@@ -80,9 +80,9 @@ signals:
     void adcValueChanged(QString);
     void directoryChanged(QString);
     void filenameChanged(QString);
-    void tickReceived(QString);
-    void lastTickChanged(QString);
+    void angleReceived(QString);
     void embeddedSW(QString);
+    void voltmeterVisible(bool);
 
 public slots:
     void dataUpdate();

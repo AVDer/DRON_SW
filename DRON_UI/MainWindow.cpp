@@ -78,7 +78,6 @@ void MainWindow::create_widgets() {
     right_panel_ = new QTabWidget(this);
 
     ticks_received_ = new QLineEdit(this);
-    last_ticks_ = new QLineEdit(this);
 }
 
 void MainWindow::create_layouts()
@@ -136,10 +135,10 @@ void MainWindow::create_layouts()
     angle_group_box_->setLayout(angle_layout_);
     meas_layout_->addWidget(angle_group_box_);
 
-    ticks_layout_->addWidget(new QLabel(tr("Ticks received:")), 0, 0);
+    ticks_layout_->addWidget(new QLabel(tr("Curent angle:")), 0, 0);
     ticks_layout_->addWidget(ticks_received_, 0, 1);
-    ticks_layout_->addWidget(new QLabel(tr("Last tick:")), 1, 0);
-    ticks_layout_->addWidget(last_ticks_, 1, 1);
+    //ticks_layout_->addWidget(new QLabel(tr("Last tick:")), 1, 0);
+    //ticks_layout_->addWidget(last_ticks_, 1, 1);
     ticks_group_box_->setLayout(ticks_layout_);
     meas_layout_->addWidget(ticks_group_box_);
 
@@ -206,8 +205,8 @@ void MainWindow::create_connections()
     connect(damper_open_button_, SIGNAL(button_pressed(ButtonID)), SLOT(open_damper_pressed()));
     connect(damper_close_button_, SIGNAL(button_pressed(ButtonID)), SLOT(close_damper_pressed()));
 
-    connect(processor_, SIGNAL(tickReceived(QString)), ticks_received_, SLOT(setText(QString)));
-    connect(processor_, SIGNAL(lastTickChanged(QString)), last_ticks_, SLOT(setText(QString)));
+    connect(processor_, SIGNAL(angleReceived(QString)), ticks_received_, SLOT(setText(QString)));
+    connect(processor_, SIGNAL(voltmeterVisible(bool)), voltage_, SLOT(setVisible(bool)));
     connect(processor_, SIGNAL(embeddedSW(QString)), SLOT(embeddedSW(QString)));
 }
 
@@ -224,7 +223,6 @@ void MainWindow::adjust_widgets()
     voltage_->setAlignment(Qt::AlignHCenter);
 
     ticks_received_->setReadOnly(true);
-    last_ticks_->setReadOnly(true);
 
     line_width_->setValue(1);
 
