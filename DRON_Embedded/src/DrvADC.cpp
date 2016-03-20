@@ -40,13 +40,10 @@ void Drv_ADC::stop() {
 }
 
 uint16_t Drv_ADC::get_adc_value() {
-  return adc_data[0];
-	/*
   uint32_t temp_value = std::accumulate(adc_data, adc_data + kADC_Buffer_Size, 0);
   auto minmax = std::minmax_element(adc_data, adc_data + kADC_Buffer_Size);
   temp_value -= (*(minmax.first) + *(minmax.second));
   return temp_value / (kADC_Buffer_Size - 2);
-	 */
 }
 
 void Drv_ADC::gpio_init() {
