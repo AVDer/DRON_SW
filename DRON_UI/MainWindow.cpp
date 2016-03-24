@@ -226,7 +226,7 @@ void MainWindow::adjust_widgets()
 
     line_width_->setValue(1);
 
-    main_splitter_->setStretchFactor(0, 3);
+    main_splitter_->setStretchFactor(0, 20);
     main_splitter_->setStretchFactor(1, 1);
 
     com_port_box_->addItems(processor_->com_port_names());

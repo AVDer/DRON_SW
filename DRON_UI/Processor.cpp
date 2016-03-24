@@ -104,15 +104,19 @@ void Processor::dataUpdate() {
                 double received_angle = measure_settings_.start_angle_ + in_message.data.command / 100.;
                 if (received_angle >= measure_settings_.start_angle_ &&
                     received_angle <= measure_settings_.stop_angle_) {
-                    get_graph_curve()->add_point(received_angle, in_message.data.data);
-                    data_file_ << received_angle << '\t' << in_message.data.data << std::endl;
+                    uint32_t normalized_data = in_message.data.data;
+                    if (measure_settings_.mode_ == mode_points) {
+                        normalized_data /= measure_settings_.exposition_;
+                    }
+                    get_graph_curve()->add_point(received_angle, normalized_data);
+                    data_file_ << received_angle << '\t' << normalized_data << std::endl;
                     ++ticks_received_;
                     last_tick_ = in_message.data.command;
                     emit angleReceived(QString::number(received_angle));
                 }
             }
             else if (measure_settings_.mode_ == mode_justice) {
-                adc_value_ = QString::number(static_cast<double>(in_message.data.data) * 3300 / 4095) + " mV";
+                adc_value_ = QString::number(in_message.data.data * 3300 / 4095) + " mV";
                 emit adcValueChanged(adc_value_);
             }
         }
